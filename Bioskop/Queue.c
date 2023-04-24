@@ -1,4 +1,4 @@
-#include"Menu.c"
+#include"checkAlgorithm.c"
 
 int isDateEmpty(List L) {
 	

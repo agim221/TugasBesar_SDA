@@ -1,12 +1,7 @@
-#include"StrukturData.c"
+#include"StrukturData.h"
 
 
 /*NRLL Date*/
-void createDate(List *L);
-void addDateFirst(List *L, int year, int month, int date);
-void addDateAfter(Date *prev, List *L, int year, int month, int date);
-void addDateLast(List *L, int year, int month, int date);
-
 void createDate(List *L) {
 	firstDate(*L) = NULL;
 	lastDate(*L) = NULL;
@@ -93,10 +88,6 @@ void printDate(List L) {
 }
 
 /*NRLL Film*/
-void addFilmFirst(Date *D, String title, String category, int age, int duration);
-void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration);
-void addFilmLast(Date *D, String title, String category, int age, int duration);
-
 int isFilmEmpty(Date D) {
 	
 	if(nextFilm(D) == NULL) return 1;
@@ -179,10 +170,6 @@ void printFilm(Date D) {
 }
 
 /*NRLL Schedule*/
-void addScheduleFirst(Film *F, int hour, int minute);
-void addScheduleAfter(Schedule *prev, Film *F, int hour, int minute);
-void addScheduleLast(Film *F, int hour, int minute);
-
 int isScheduleEmpty(Film F) {
 	
 	if(firstSchedule(F) == NULL) return 1;
@@ -210,7 +197,7 @@ void addScheduleFirst(Film *F, int hour, int minute) {
 			lastSchedule(*F) = baru;
 		} else {
 			nextSchedule(*lastSchedule(*F)) = baru;
-			lastSchedule(*F) = baru;
+//			lastSchedule(*F) = baru;
 		}
 		nextSchedule(*baru) = NULL;
 	} else {
@@ -272,16 +259,15 @@ void printSchedule(Film F) {
 }
 
 /*NRLL Film*/
-void addStudio(Schedule *S, String name);
-
 void addStudio(Schedule *S, String name) {
 	Studio *studio;
+	
+	studio = (Studio *) malloc(sizeof(Studio));
 	
 	jmlhPenonton(*studio) = 0;
 	studioName(*studio) = name;
 	firstChair(*studio) = NULL;
 	lastChair(*studio) = NULL;
-	nextChair(*studio) = NULL;
 	nextStudio(*S) = studio;
 }
 

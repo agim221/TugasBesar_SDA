@@ -129,29 +129,6 @@ void EditFilm(List *L) {
 	}
 }
 
-void tampilkanPilihanMenuEditFilm(Film F) {
-	gotoxy(55, 5); printf("Ingin mengubah apa ? ");
-	gotoxy(50, 8); printf("1. Judul");
-	gotoxy(50, 9); printf("2. Kategori");
-	gotoxy(50, 10); printf("3. Umur");
-	gotoxy(50, 11); printf("4. Durasi");
-	if(firstSchedule(F) != NULL) gotoxy(50, 12); printf("5. Jam tayang"); 
-}
 
-void tampilkanPilihanMenuEditJamTayang(Film F) {
-	if(firstSchedule(F) != NULL) {
-		Schedule *bantu;
-		struct tm *time;
-		int i;
-		bantu = firstSchedule(F);
-	
-		gotoxy(55, 5); printf("Ingin Mengubah Jam Tayang mana ? ");
-		for(i = 0; i < CountSchedule(F); i++) {
-			time = localtime(&bantu->time);
-			gotoxy(50, 8 + i); printf("%d. %d.%d", i + 1,time->tm_hour, time->tm_min);
-			bantu = nextSchedule(*bantu);
-		}
-	} else {
-		gotoxy(55, 5); printf("Jam Tayang Kosong!!!");
-	}
-}
+
+

@@ -145,6 +145,8 @@ void tampilanMenuPilihLoket(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket(lockets queue, List *L);
 void printListFilm(lockets queue, List *L);
 void printChair(lockets queue, List *L);
+void tampilkanPilihanMenuEditFilm(Film F);
+void tampilkanPilihanMenuEditJamTayang(Film F);
 
 /*Cursor*/
 int Cursor(int BanyakPilihan, int x, int y);
@@ -200,4 +202,6 @@ int isStudioExist(Date D, String studioName);
 /*Main Proses*/
 void CreateFilm(List *L);
 /*Proses untuk membuat sebuah film*/
+
+void EditFilm(List *L);
 

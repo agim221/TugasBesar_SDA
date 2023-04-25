@@ -69,3 +69,89 @@ void CreateFilm(List *L) {
 		printf("\nIngin Memasukan Jam Tayang Lainnya ? (Y/N)"); scanf(" %c", &lagi);
 	}
 }
+
+void EditFilm(List *L) {
+	Date *date;
+	Film *film;
+	Schedule *schedule;
+	struct tm *time;
+	date = firstDate(*L);
+	String title = (String) malloc(sizeof(char));
+	String tempString = (String) malloc(sizeof(char));
+	int i;
+	int tempNumber;
+	int jumlahPilihan = 5;
+	
+	printf("Masukan judul film yang ingin diubah : "); scanf(" %[^\n]", title);
+	
+	while(date != NULL) {
+		film = GetFilm(*L, date->time, title);
+		if(film != NULL) break;
+		date = nextDate(*date);
+	}
+	
+	tampilkanPilihanMenuEditFilm(*film);
+	
+	if(firstSchedule(*film) == NULL) jumlahPilihan = 4;
+	
+	
+	switch(Cursor(jumlahPilihan, 48, 8)) {
+		case 1:
+			printf("Masukan Judul Baru : "); scanf(" %[^\n]", tempString);
+			filmTitle(*film) = tempString;
+			break;
+		case 2:
+			printf("Masukan kategori baru : "); scanf(" %[^\n]", tempString);
+			filmCategory(*film) = tempString;
+			break;
+		case 3: 
+			printf("Masukan umur baru : "); scanf("%d", &tempNumber);
+			filmAge(*film) = tempNumber;
+			break;
+		case 4:
+			printf("Masukan durasi baru : "); scanf("%d", &tempNumber);
+			filmDuration(*film) = tempNumber;
+			break;
+		case 5:
+			schedule = firstSchedule(*film);
+			tampilkanPilihanMenuEditJamTayang(*film);
+			printf("test");
+			for(i = 0; i < Cursor(CountSchedule(*film), 48, 8) - 1; i++) {
+				schedule = nextSchedule(*schedule);
+			}
+			time = localtime(&schedule->time);
+			printf("Masukan Jam Tayang : "); scanf("%d", &tempNumber);
+			time->tm_hour = tempNumber;
+			printf("Masuka Meni Tayang : "); scanf("%d", &tempNumber);
+			time->tm_min = tempNumber;
+			schedule->time = mktime(time);
+			break;
+	}
+}
+
+void tampilkanPilihanMenuEditFilm(Film F) {
+	gotoxy(55, 5); printf("Ingin mengubah apa ? ");
+	gotoxy(50, 8); printf("1. Judul");
+	gotoxy(50, 9); printf("2. Kategori");
+	gotoxy(50, 10); printf("3. Umur");
+	gotoxy(50, 11); printf("4. Durasi");
+	if(firstSchedule(F) != NULL) gotoxy(50, 12); printf("5. Jam tayang"); 
+}
+
+void tampilkanPilihanMenuEditJamTayang(Film F) {
+	if(firstSchedule(F) != NULL) {
+		Schedule *bantu;
+		struct tm *time;
+		int i;
+		bantu = firstSchedule(F);
+	
+		gotoxy(55, 5); printf("Ingin Mengubah Jam Tayang mana ? ");
+		for(i = 0; i < CountSchedule(F); i++) {
+			time = localtime(&bantu->time);
+			gotoxy(50, 8 + i); printf("%d. %d.%d", i + 1,time->tm_hour, time->tm_min);
+			bantu = nextSchedule(*bantu);
+		}
+	} else {
+		gotoxy(55, 5); printf("Jam Tayang Kosong!!!");
+	}
+}

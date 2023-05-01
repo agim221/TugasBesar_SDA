@@ -37,7 +37,6 @@ void CreateFilm(List *L) {
 	printf("\nDuration : "); scanf("%d", &duration);
 	
 	addFilmLast(dateFilm , title, category, age, duration);
-	
 	Film *film = GetFilm(*L, time, title);
 
 	while(CountSchedule(*film) < 36000 / filmDuration(*film) && lagi == 'Y') {

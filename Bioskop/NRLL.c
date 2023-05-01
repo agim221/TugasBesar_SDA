@@ -77,6 +77,61 @@ void addDateLast(List *L, int year, int month, int date) {
 	}
 }
 
+void delDateFirst(List *L) {
+	Date *hapus;
+	hapus = firstDate(*L);
+	
+	if(hapus != NULL) {
+		if(nextDate(*hapus) == NULL) {
+			firstDate(*L) = NULL;
+			lastDate(*L) = NULL;
+		} else {
+			firstDate(*L) = nextDate(*hapus);
+		}
+		free(hapus);
+	} else {
+		printf("Data Kosong\n");
+	}
+}
+
+void delDateAfter(Date *prev, List *L) {
+	if(prev != NULL) {
+		Date *hapus;
+		hapus = nextDate(*prev);
+		if(hapus != NULL) {
+			if(nextDate(*hapus) == NULL) {
+				lastDate(*L) = prev;
+				nextDate(*prev) = NULL;
+			} else {
+				nextDate(*prev) = nextDate(*hapus);
+			}
+			free(hapus);
+			printf("Menghapus huruf berhasil");
+		} else {
+			printf("Data Kosong");
+		}
+	}
+}
+
+void delDateLast(List *L) {
+	if(firstDate(*L) != NULL) {
+		Date *last, *beforeLast;
+		last = firstDate(*L);
+		beforeLast = NULL;
+		if(nextDate(*last) == NULL) {
+			delDateFirst(L);
+		} else {
+			while(last != NULL) {
+				beforeLast = last;
+				last = nextDate(*last);
+			}
+			delDateAfter(beforeLast, L);
+		}
+	} else {
+		printf("Data Kosong\n");
+	}
+}
+
 void printDate(List L) {
 	Date *bantu;
 	bantu = L.firstDate;
@@ -156,6 +211,60 @@ void addFilmLast(Date *D, String title, String category, int age, int duration) 
 			last = nextFilm(*last);
 		}
 		addFilmAfter(beforeLast, D, title, category, age, duration);
+	}
+}
+
+void delFilmFirst(Date *D) {
+	Film *hapus;
+	hapus = firstFilm(*D);
+	
+	if(hapus != NULL) {
+		if(nextFilm(*hapus) == NULL) {
+			firstFilm(*D) = NULL;
+			lastFilm(*D) = NULL;
+		} else {
+			firstFilm(*D) = nextFilm(*hapus);
+		}
+		free(hapus);
+	} else {
+		printf("Data Kosong\n");
+	}
+}
+
+void delFilmAfter(Film *prev, Date *D) {
+	if(prev != NULL) {
+		Film *hapus;
+		hapus = nextFilm(*prev);
+		if(hapus != NULL) {
+			if(nextFilm(*hapus) == NULL) {
+				lastFilm(*D) = prev;
+				nextFilm(*prev) = NULL;
+			} else {
+				nextFilm(*prev) = nextFilm(*hapus);
+			}
+			free(hapus);
+		} else {
+			printf("Data Kosong");
+		}
+	}
+}
+
+void delFilmLast(Date *D) {
+	if(firstFilm(*D) != NULL) {
+		Film *last, *beforeLast;
+		last = firstFilm(*D);
+		beforeLast = NULL;
+		if(nextFilm(*last) == NULL) {
+			delFilmFirst(D);
+		} else {
+			while(last != NULL) {
+				beforeLast = last;
+				last = nextFilm(*last);
+			}
+			delFilmAfter(beforeLast, D);
+		}
+	} else {
+		printf("Data Kosong\n");
 	}
 }
 
@@ -246,6 +355,61 @@ void addScheduleLast(Film *F, int hour, int minute) {
 	}
 }
 
+void delScheduleFirst(Film *F) {
+	Schedule *hapus;
+	hapus = firstSchedule(*F);
+	
+	if(hapus != NULL) {
+		if(nextSchedule(*hapus) == NULL) {
+			firstSchedule(*F) = NULL;
+			lastSchedule(*F) = NULL;
+		} else {
+			firstSchedule(*F) = nextSchedule(*hapus);
+		}
+		free(hapus);
+	} else {
+		printf("Data Kosong\n");
+	}
+}
+
+void delScheduleAfter(Schedule *prev, Film *F) {
+	if(prev != NULL) {
+		Schedule *hapus;
+		hapus = nextSchedule(*prev);
+		if(hapus != NULL) {
+			if(nextSchedule(*hapus) == NULL) {
+				lastSchedule(*F) = prev;
+				nextSchedule(*prev) = NULL;
+			} else {
+				nextSchedule(*prev) = nextSchedule(*hapus);
+			}
+			free(hapus);
+			printf("Menghapus huruf berhasil");
+		} else {
+			printf("Data Kosong");
+		}
+	}
+}
+
+void delScheduleLast(Film *F) {
+	if(firstSchedule(*F) != NULL) {
+		Schedule *last, *beforeLast;
+		last = firstSchedule(*F);
+		beforeLast = NULL;
+		if(nextSchedule(*last) == NULL) {
+			delScheduleFirst(F);
+		} else {
+			while(last != NULL) {
+				beforeLast = last;
+				last = nextSchedule(*last);
+			}
+			delScheduleAfter(beforeLast, F);
+		}
+	} else {
+		printf("Data Kosong\n");
+	}
+}
+
 void printSchedule(Film F) {
 	Schedule *bantu;
 	struct tm *waktu;
@@ -271,9 +435,63 @@ void addStudio(Schedule *S, String name) {
 	nextStudio(*S) = studio;
 }
 
+void delStudio(Schedule *S) {
+	Studio *hapus;
+	hapus = nextStudio(*S);
+	
+	if(hapus != NULL) {
+		firstChair(*hapus) = NULL;
+		lastChair(*hapus) = NULL;
+		nextStudio(*S) = NULL;
+			
+		free(hapus);
+	} else {
+		printf("\nStudio tidak ada");
+	}
+	
+}
+
 void printStudio(Schedule S) {
 	Studio *bantu;
 	bantu = S.nextStudio;
 	
 	printf("Nama Studio : %s \nJumlah Penonton : %d", bantu->studioName, bantu->jmlhPenonton);
+}
+
+/*NRLL Chair*/
+int isChairEmpty(Studio St) {
+	if (firstChair(St) == NULL) return 1;
+
+	return 0;
+}
+
+void addChair(Studio *St, String numchair, String name, int age) {
+	Chair *chair;
+	chair = (Chair*)malloc(sizeof(Chair));
+	if (chair != NULL) {
+		numChair(*chair) = numchair;
+		chair->person.name = name;
+		chair->person.age = age;
+		if (isChairEmpty(*St)) {
+			firstChair(*St) = chair;
+			lastChair(*St) = chair;
+		}
+		else {
+			nextChair(*lastChair(*St)) = chair;
+			lastChair(*St) = chair;
+		}
+		nextChair(*chair) = NULL;
+	} else {
+		printf("\nMemori penuh");
+	}
+}
+
+void printChair(Studio St) {
+	Chair* bantu;
+	bantu = St.firstChair;
+
+	while (bantu != NULL) {
+		printf("%s - %s\n", bantu->numChair, bantu->person.name);
+		bantu = nextChair(*bantu);
+	}
 }

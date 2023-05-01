@@ -71,49 +71,55 @@ void pilihTampilanMenuPilihLoket(lockets queue, List *L) {
 
 void printListFilm(lockets queue, List *L) { 
 	Date *date = firstDate(*L);
-	Film *film = firstFilm(*date);
-	Schedule *schedule;
-	struct tm *time;
+	
+	if(date != NULL) {
 
-	int i, j, k;
+		Film *film = firstFilm(*date);
+		Schedule *schedule;
+		struct tm *time;
+
+		int i, j, k;
 	//	print box
-	gotoxy(30, 1); printf("ษออออออออออออออออออออออออออออบ LIST FILM บออออออออออออออออออออออออออออป");
-	for(i = 2; i < 26; i++) {
-	    gotoxy(30, i); printf("บ                                                                     บ");
-	}
-	gotoxy(30, 26); printf("ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
-	
-	//print list box
-	for(j = 0; j <= (totalFilm(date) - 1) * 6; j += 6) {
-		schedule = firstSchedule(*film);
-		gotoxy(31, 2 + j); printf(" ษอออออออบ FILM #%d บอออออออออออออออออออออออออออออออออออออออออออออออป ", (j / 6) + 1);
-		for(i = 0; i < 4;i++) {
-			gotoxy(31, 3 + j + i); printf(" บ                                                                 บ ");
+		gotoxy(30, 1); printf("ษออออออออออออออออออออออออออออบ LIST FILM บออออออออออออออออออออออออออออป");
+		for(i = 2; i < 26; i++) {
+		    gotoxy(30, i); printf("บ                                                                     บ");
 		}
-		gotoxy(35, 3 + j) ;printf("%s", filmTitle(*film));
-		gotoxy(35, 4 + j) ; printf("%s", filmCategory(*film));
-		gotoxy(93, 3 + j); printf("%d", filmAge(*film));
-		gotoxy(93, 4 + j); printf("%d", filmDuration(*film));
+		gotoxy(30, 26); printf("ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
+	
+		//print list box
+		for(j = 0; j <= (totalFilm(date) - 1) * 6; j += 6) {
+			schedule = firstSchedule(*film);
+			gotoxy(31, 2 + j); printf(" ษอออออออบ FILM #%d บอออออออออออออออออออออออออออออออออออออออออออออออป ", (j / 6) + 1);
+			for(i = 0; i < 4;i++) {
+				gotoxy(31, 3 + j + i); printf(" บ                                                                 บ ");
+			}
+			gotoxy(35, 3 + j) ;printf("%s", filmTitle(*film));
+			gotoxy(35, 4 + j) ; printf("%s", filmCategory(*film));
+			gotoxy(93, 3 + j); printf("%d", filmAge(*film));
+			gotoxy(93, 4 + j); printf("%d", filmDuration(*film));
+			
 		
-		
-		for(k = 0; k <= CountSchedule(*film) * 6;k += 8) {
-			time = localtime(&schedule->time);
-			gotoxy(35 + k, 6 + j); printf("%d.%d", time->tm_hour, time->tm_min);
-			schedule = nextSchedule(*schedule);
+			for(k = 0; k < CountSchedule(*film) * 6;k += 8) {
+				time = localtime(&schedule->time);
+				gotoxy(35 + k, 6 + j); printf("%d.%d", time->tm_hour, time->tm_min);
+				schedule = nextSchedule(*schedule);
+			}
+			gotoxy(31, 7 + j); printf(" ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ ");
+			film = nextFilm(*film);
 		}
-		gotoxy(31, 7 + j); printf(" ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ ");
-		film = nextFilm(*film);
+	
+		char cursor;
+	
+		do{
+			cursor=getch();
+		} while(cursor != 27);
+	
+		system("cls");
+		tampilanMenuUtama(queue, L);
+	} else {
+		printf("\nDate Kosong");
 	}
-	
-	char cursor;
-	
-	do{
-		cursor=getch();
-	} while(cursor != 27);
-	
-	system("cls");
-	tampilanMenuUtama(queue, L);
-}
+}	
 //
 //void printChair(lockets queue, List *L) {
 //	int i,j,k;

@@ -35,6 +35,8 @@
 #define lastChair(L) (L).lastChair
 #define nextChair(L) (L).nextChair
 
+#define numChair(L) (L).noKursi
+
 typedef char* String;
 
 typedef struct film *almtFilm;
@@ -85,7 +87,7 @@ typedef struct person {
 typedef struct chair {
 	String noKursi;
 	Person person;
-	almtChair *nextChair;
+	almtChair nextChair;
 } Chair;
 
 typedef struct loket {
@@ -128,6 +130,9 @@ void addStudio(Schedule *S, String name);
 void addStudio(Schedule *S, String name);
 void printStudio(Schedule S);
 
+/*NRLL Chair*/
+void printChair(Studio St);
+
 /*System*/
 void gotoxy(int x,int y);
 void setcolor (unsigned short color);
@@ -144,7 +149,7 @@ void pilihTampilanMenuUtama(lockets queue, List *L);
 void tampilanMenuPilihLoket(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket(lockets queue, List *L);
 void printListFilm(lockets queue, List *L);
-void printChair(lockets queue, List *L);
+void printChairStudio(lockets queue, List *L);
 void tampilkanPilihanMenuEditFilm(Film F);
 void tampilkanPilihanMenuEditJamTayang(Film F);
 

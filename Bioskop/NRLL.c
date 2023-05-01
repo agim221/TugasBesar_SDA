@@ -491,7 +491,7 @@ void printChair(Studio St) {
 	bantu = St.firstChair;
 
 	while (bantu != NULL) {
-		printf("%s - %s\n", bantu->numChair, bantu->person.name);
+		printf("%s - %s\n", numChair(*bantu), bantu->person.name);
 		bantu = nextChair(*bantu);
 	}
 }

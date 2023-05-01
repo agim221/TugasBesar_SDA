@@ -47,9 +47,9 @@ almtStudio SearchStudio(Schedule S, String name) {
 	return NULL;
 }
 
-//Chair SearchChair(Studio studio, String noKursi) {
+//almtChair SearchChair(Studio studio, String noKursi) {
 //	Chair *chair;
-//	chair = studio->nextChair;
+//	chair = studio.nextChair;
 //	
 //	while(chair != NULL) {
 //		if(strcmp(chair->noKursi, noKursi)) return chair;

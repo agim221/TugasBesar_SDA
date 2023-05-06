@@ -159,7 +159,7 @@ int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute,
 	return 0;
 }
 
-int totalFilm(Date *D) {
+int CountFilm(Date *D) {
 	Film *bantu;
 	bantu = firstFilm(*D);
 	int hasil = 0;

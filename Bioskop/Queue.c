@@ -7,6 +7,12 @@ int isDateEmpty(List L) {
 	return 0;
 }
 
+void createLocket(lockets locket, String locketName, int locketNumber) {
+		firstPerson(locket, locketNumber) = NULL;
+		lastPerson(locket, locketNumber) = NULL;
+		locketName(locket, locketNumber) = locketName;
+}
+
 int isLocketEmpty(lockets L, int index) {
 	
 	if(firstPerson(L, index) == NULL) return 1;

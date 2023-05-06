@@ -146,7 +146,9 @@ void delPerson(lockets L, int index);
 /*Menu*/
 void tampilanMenuUtama(lockets queue, List *L);
 void pilihTampilanMenuUtama(lockets queue, List *L);
+void tampilanMenuPilihLoket2(lockets queue, List *L);
 void tampilanMenuPilihLoket(lockets queue, List *L);
+void pilihTampilanMenuPilihLoket2(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket(lockets queue, List *L);
 void printListFilm(lockets queue, List *L);
 void printChairStudio(lockets queue, List *L);
@@ -195,7 +197,7 @@ int CountSchedule(Film f);
 /*Menghitung semua schedule yang tersedia dalam sebuah film dan 
 mengembalikan jumlah total schedule yang tersedia tersebut*/
 
-int totalFilm(Date *D);
+int CountFilm(Date *D);
 /*Menghitung semua film yang tersedia di sebuah tanggal yang ditentukan*/
 
 int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio);
@@ -210,3 +212,7 @@ void CreateFilm(List *L);
 
 void EditFilm(List *L);
 /*Prosese untuk mengedit film yang sudah ada*/
+
+void printPilihFilmDanJadwal(lockets queue, List *L);
+
+void serveQueue(lockets L, List *X, int index);

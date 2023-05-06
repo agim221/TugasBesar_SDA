@@ -1,5 +1,19 @@
 #include"Queue.c"
 
+void serveQueue(lockets queue, List *X, int index){
+	if(isLocketEmpty(queue, index)){
+		system("cls");
+		gotoxy(30, 8); printf("Antrian Kosong, Silahkan Input Antrian Terlebih Dahulu.\n");
+		system("pause"); system("cls");
+	}else{
+		List *bantu = X;
+		printPilihFilmDanJadwal(queue, bantu);
+		system("cls");
+		addStudio(bantu->firstDate->firstFilm->firstSchedule, "Studio 1");
+		printChairStudio(queue, bantu);
+	}
+}
+
 void CreateFilm(List *L) {
 	int year, month, date, hour, minute;
 	String title, category, studioName;
@@ -37,6 +51,7 @@ void CreateFilm(List *L) {
 	printf("\nDuration : "); scanf("%d", &duration);
 	
 	addFilmLast(dateFilm , title, category, age, duration);
+	
 	Film *film = GetFilm(*L, time, title);
 
 	while(CountSchedule(*film) < 36000 / filmDuration(*film) && lagi == 'Y') {

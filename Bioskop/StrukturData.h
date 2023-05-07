@@ -31,9 +31,9 @@
 
 #define jmlhPenonton(L) (L).jmlhPenonton
 #define studioName(L) (L).studioName
-#define firstChair(L) (L).firstChair
-#define lastChair(L) (L).lastChair
-#define nextChair(L) (L).nextChair
+//#define firstChair(L) (L).firstChair
+//#define lastChair(L) (L).lastChair
+//#define nextChair(L) (L).nextChair
 
 #define numChair(L) (L).noKursi
 
@@ -45,6 +45,7 @@ typedef struct schedule *almtSchedule;
 typedef struct studio *almtStudio;
 typedef struct person *almtPerson;
 typedef struct chair *almtChair;
+typedef struct kursi *almtKursi;
 
 typedef struct date {
 	time_t time;
@@ -71,11 +72,14 @@ typedef struct schedule {
 	almtStudio nextStudio;
 } Schedule;
 
+typedef struct kursi {
+	int A[10], B[10], C[10], D[10], E[10], F[10], G[10];
+} Kursi;
+
 typedef struct studio {
 	String studioName;
 	int jmlhPenonton;
-	almtChair firstChair;
-	almtChair lastChair;
+	almtKursi Chair;
 } Studio;
 
 typedef struct person {
@@ -85,9 +89,9 @@ typedef struct person {
 } Person;
 
 typedef struct chair {
-	String noKursi;
+	int noKursi;
+	char KodeKursi;
 	Person person;
-	almtChair nextChair;
 } Chair;
 
 typedef struct loket {
@@ -101,6 +105,8 @@ typedef struct {
 	almtDate firstDate;
 	almtDate lastDate;
 } List;
+
+
 
 /*NRLL Date*/
 int isDateEmpty(List L);
@@ -146,7 +152,7 @@ void delPerson(lockets L, int index);
 /*Menu*/
 void tampilanMenuUtama(lockets queue, List *L);
 void pilihTampilanMenuUtama(lockets queue, List *L);
-void tampilanMenuPilihLoket2(lockets queue, List *L);
+void tampilanMenuPilihLoket2(lockets queue, List *);
 void tampilanMenuPilihLoket(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket2(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket(lockets queue, List *L);

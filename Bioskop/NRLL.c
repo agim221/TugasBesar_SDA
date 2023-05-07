@@ -425,13 +425,25 @@ void printSchedule(Film F) {
 /*NRLL Film*/
 void addStudio(Schedule *S, String name) {
 	Studio *studio;
+	int i;
 	
 	studio = (Studio *) malloc(sizeof(Studio));
 	
 	jmlhPenonton(*studio) = 0;
 	studioName(*studio) = name;
-	firstChair(*studio) = NULL;
-	lastChair(*studio) = NULL;
+	studio->Chair->A[0] = 1;
+//	for(i = 0; i < 10; i++){
+//		studio->Chair->A[i] = 0;
+//		studio->Chair->B[i] = 0;
+//		studio->Chair->C[i] = 0;
+//		studio->Chair->D[i] = 0;
+//		studio->Chair->E[i] = 0;
+//		studio->Chair->F[i] = 0;
+//		studio->Chair->G[i] = 0;
+//		
+//	}
+//	firstChair(*studio) = NULL;
+//	lastChair(*studio) = NULL;
 	nextStudio(*S) = studio;
 }
 
@@ -440,8 +452,8 @@ void delStudio(Schedule *S) {
 	hapus = nextStudio(*S);
 	
 	if(hapus != NULL) {
-		firstChair(*hapus) = NULL;
-		lastChair(*hapus) = NULL;
+//		firstChair(*hapus) = NULL;
+//		lastChair(*hapus) = NULL;
 		nextStudio(*S) = NULL;
 			
 		free(hapus);
@@ -459,39 +471,39 @@ void printStudio(Schedule S) {
 }
 
 /*NRLL Chair*/
-int isChairEmpty(Studio St) {
-	if (firstChair(St) == NULL) return 1;
+//int isChairEmpty(Studio St) {
+//	if (firstChair(St) == NULL) return 1;
+//
+//	return 0;
+//}
 
-	return 0;
-}
+//void addChair(Studio *St, String numchair, String name, int age) {
+//	Chair *chair;
+//	chair = (Chair*)malloc(sizeof(Chair));
+//	if (chair != NULL) {
+//		numChair(*chair) = numchair;
+//		chair->person.name = name;
+//		chair->person.age = age;
+//		if (isChairEmpty(*St)) {
+//			firstChair(*St) = chair;
+//			lastChair(*St) = chair;
+//		}
+//		else {
+//			nextChair(*lastChair(*St)) = chair;
+//			lastChair(*St) = chair;
+//		}
+//		nextChair(*chair) = NULL;
+//	} else {
+//		printf("\nMemori penuh");
+//	}
+//}
 
-void addChair(Studio *St, String numchair, String name, int age) {
-	Chair *chair;
-	chair = (Chair*)malloc(sizeof(Chair));
-	if (chair != NULL) {
-		numChair(*chair) = numchair;
-		chair->person.name = name;
-		chair->person.age = age;
-		if (isChairEmpty(*St)) {
-			firstChair(*St) = chair;
-			lastChair(*St) = chair;
-		}
-		else {
-			nextChair(*lastChair(*St)) = chair;
-			lastChair(*St) = chair;
-		}
-		nextChair(*chair) = NULL;
-	} else {
-		printf("\nMemori penuh");
-	}
-}
-
-void printChair(Studio St) {
-	Chair* bantu;
-	bantu = St.firstChair;
-
-	while (bantu != NULL) {
-		printf("%s - %s\n", numChair(*bantu), bantu->person.name);
-		bantu = nextChair(*bantu);
-	}
-}
+//void printChair(Studio St) {
+//	Chair* bantu;
+//	bantu = St.firstChair;
+//
+//	while (bantu != NULL) {
+//		printf("%s - %s\n", numChair(*bantu), bantu->person.name);
+//		bantu = nextChair(*bantu);
+//	}
+//}

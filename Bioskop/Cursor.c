@@ -52,6 +52,7 @@ int Cursor(int BanyakPilihan,int x,int y)
 }
 
 int CursorPilihKursi() {
+//	int opsi = sizeof(k.A);
 	int pilih = 1;
 	int x = 24, y = 5;
 	char cursor;
@@ -60,7 +61,7 @@ int CursorPilihKursi() {
 	do
 	{
 		cursor=getch();
-		
+
 		if(cursor == 80) {
 			if(pilih + 10 > 70) {
 				gotoxy(x, y); printf(" ");

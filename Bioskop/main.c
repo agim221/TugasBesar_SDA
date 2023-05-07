@@ -4,7 +4,7 @@ int main() {
 	
 	List list;
 	lockets locket;
-	
+
 	createLocket(locket, "loket1", 0);
 	createLocket(locket, "loket2", 1);
 	
@@ -36,7 +36,7 @@ int main() {
 
 	
 	/*TEST STUDIO*/
-//	addStudio(list.firstDate->firstFilm->firstSchedule, "Studio 1");
+	addStudio(list.firstDate->firstFilm->firstSchedule, "Studio 1");
 //	printStudio(*list.firstDate->firstFilm->firstSchedule);
 //	printListFilm(locket, &list);
 //tampilanMenuUtama(locket, &list);
@@ -49,7 +49,7 @@ int main() {
 //	addChair(list.firstDate->firstFilm->firstSchedule->nextStudio, "A2", "agim", 19);
 //	addChair(list.firstDate->firstFilm->firstSchedule->nextStudio, "A3", "yayan", 19);
 //	printChair(*list.firstDate->firstFilm->firstSchedule->nextStudio);
-	
+
 //	test loket
 	tampilanMenuUtama(locket, &list);
 //printPilihFilmDanJadwal();

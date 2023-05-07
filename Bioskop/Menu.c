@@ -160,6 +160,7 @@ void printChairStudio(lockets queue, List *L) {
 	Film *film = firstFilm(*date);
 	Schedule *schedule = firstSchedule(*film);
 	struct tm *time = localtime(&schedule->time);
+	Kursi *kursi = schedule->nextStudio->Chair;
 	
 	int i,j,k;
 	
@@ -172,24 +173,60 @@ void printChairStudio(lockets queue, List *L) {
 			gotoxy(20, 5+i+j); printf("º    º    º    º    º    º    º    º    º    º    º");
 		}
 	}
+	
 	int bantu = 1;
 	for(i = 0; i <= 45; i += 5) {
 		for(j = 0; j < 21; j += 3) {
-			if(j == 0){
-				gotoxy(22 + i, 6+j); printf("G%d", bantu);
-			}else if(j == 3){
-				gotoxy(22 + i, 6+j); printf("F%d", bantu);
-			}else if(j == 6){
-				gotoxy(22 + i, 6+j); printf("E%d", bantu);
-			}else if(j == 9){
-				gotoxy(22 + i, 6+j); printf("D%d", bantu);
-			}else if(j == 12){
-				gotoxy(22 + i, 6+j); printf("C%d", bantu);
-			}else if(j == 15){
-				gotoxy(22 + i, 6+j); printf("B%d", bantu);
-			}else if(j == 18){
-				gotoxy(22 + i, 6+j); printf("A%d", bantu);
-			}
+						if(j == 0){
+							gotoxy(22 + i, 6+j); 	
+							if(kursi->G[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("G%d", bantu);
+						}else if(j == 3){
+							gotoxy(22 + i, 6+j); 
+							if(kursi->F[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("F%d", bantu);
+						}else if(j == 6){
+							gotoxy(22 + i, 6+j); 
+							if(kursi->E[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("E%d", bantu);
+						}else if(j == 9){
+							gotoxy(22 + i, 6+j); 
+							if(kursi->D[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("D%d", bantu);
+						}else if(j == 12){
+							gotoxy(22 + i, 6+j); 
+							if(kursi->C[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("C%d", bantu);
+						}else if(j == 15){
+							gotoxy(22 + i, 6+j); 
+							if(kursi->B[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("B%d", bantu);
+						}else if(j == 18){
+							gotoxy(22 + i, 6+j); 
+							if(kursi->A[bantu-1] == 0){ 
+								setcolor(2);
+								}else{ 
+									setcolor(4);
+								} printf("A%d", bantu);
+						}
 		}
 			bantu++;
 	}
@@ -212,9 +249,25 @@ void printChairStudio(lockets queue, List *L) {
 	gotoxy(74,21); setcolor(4); printf("A1 : Kursi Tidak Tersedia");
 	gotoxy(74,22); setcolor(2); printf("A1 : Kursi Tersedia");
 	gotoxy(74,23); setcolor(13); printf("Û : Pointer Memilih Kursi");
-	CursorPilihKursi();
-	system("pause");
-	system("cls");
+	int pilih = CursorPilihKursi();
+
+	if(pilih < 11){
+//		kursi->G[pilih-1] = 1;	
+//		printf("%d", kursiG[pilih-1]);
+		system("pause");
+	}else if(pilih < 21){
+		kursi->F[pilih-11] = 1;
+	}else if(pilih < 31){
+		kursi->E[pilih-21] = 1;
+	}else if(pilih < 41){
+		kursi->D[pilih-31] = 1;
+	}else if(pilih < 51){
+		kursi->C[pilih-41] = 1;
+	}else if(pilih < 61){
+		kursi->B[pilih-51] = 1;
+	}else if(pilih < 71){
+		kursi->A[pilih-61] = 1;
+	}
 }
 
 void printPilihFilmDanJadwal(lockets queue, List *L) {

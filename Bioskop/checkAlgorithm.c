@@ -1,3 +1,12 @@
+/*
+	File 				: checkAlgorithm.c
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include"NRLL.c"
 
 almtDate SearchDate(List L, time_t time) {
@@ -18,6 +27,18 @@ almtFilm SearchFilm(Date D,String name) {
 	
 	while(film != NULL) {
 		if(!strcmp(name, film->judul)) return film;
+		film = nextFilm(*film);
+	}
+	
+	return NULL;
+}
+
+almtFilm SearchFilmNext(Date D,String name) {
+	Film *film;
+	film = firstFilm(D);
+	
+	while(nextFilm(*film) != NULL) {
+		if(!strcmp(name, nextFilm(*film)->judul)) return film;
 		film = nextFilm(*film);
 	}
 	
@@ -180,15 +201,12 @@ int isStudioExist(Date D, String studioName) {
 	while(film != NULL) {
 		schedule = firstSchedule(*film);
 		while(schedule != NULL) {
-			printf("%s\n", schedule->nextStudio->studioName);
 			if(!strcmp(studioName, schedule->nextStudio->studioName)) {
-				printf("\nKeluar Karena ada\n");
 				return 1;
 			}
 			schedule = schedule->nextSchedule;
 		}
 		film = nextFilm(*film);
-		printf("Next film\n");
 	}
 	
 	return 0;

@@ -1,3 +1,12 @@
+/*
+	File 				: NRLL.c
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include"StrukturData.h"
 
 
@@ -88,6 +97,9 @@ void delDateFirst(List *L) {
 		} else {
 			firstDate(*L) = nextDate(*hapus);
 		}
+		while(hapus->firstFilm != NULL) {
+			delFilmFirst(hapus);
+		}
 		free(hapus);
 	} else {
 		printf("Data Kosong\n");
@@ -105,8 +117,10 @@ void delDateAfter(Date *prev, List *L) {
 			} else {
 				nextDate(*prev) = nextDate(*hapus);
 			}
+			while(hapus->firstFilm != NULL) {
+				delFilmFirst(hapus);
+			}
 			free(hapus);
-			printf("Menghapus huruf berhasil");
 		} else {
 			printf("Data Kosong");
 		}
@@ -225,6 +239,9 @@ void delFilmFirst(Date *D) {
 		} else {
 			firstFilm(*D) = nextFilm(*hapus);
 		}
+		while(hapus->firstSchedule != NULL) {
+			delScheduleFirst(hapus);
+		}
 		free(hapus);
 	} else {
 		printf("Data Kosong\n");
@@ -241,6 +258,9 @@ void delFilmAfter(Film *prev, Date *D) {
 				nextFilm(*prev) = NULL;
 			} else {
 				nextFilm(*prev) = nextFilm(*hapus);
+			}
+			while(hapus->firstSchedule != NULL) {
+				delScheduleFirst(hapus);
 			}
 			free(hapus);
 		} else {
@@ -275,6 +295,25 @@ void printFilm(Date D) {
 	while(bantu != NULL) {
 		printf("%s %s %d %d\n", bantu->judul, bantu->kategori, bantu->durasi, bantu->umur);
 		bantu = nextFilm(*bantu);
+	}
+}
+
+void printAllFilm(List L) {
+	Date *date = firstDate(L);
+	Film *film;
+	int i = 1;
+	gotoxy(45, 2); printf("List Full Film");
+	if(date != NULL) {
+		while(date != NULL) {
+			film = firstFilm(*date);
+			while(film != NULL) {
+				gotoxy(35, 2 + i++); printf("%s", filmTitle(*film));
+				film = nextFilm(*film);
+			}
+			date = nextDate(*date);
+		}
+	} else {
+		printf("\nFilm Kosong");
 	}
 }
 
@@ -366,6 +405,7 @@ void delScheduleFirst(Film *F) {
 		} else {
 			firstSchedule(*F) = nextSchedule(*hapus);
 		}
+		delStudio(hapus);
 		free(hapus);
 	} else {
 		printf("Data Kosong\n");
@@ -383,8 +423,8 @@ void delScheduleAfter(Schedule *prev, Film *F) {
 			} else {
 				nextSchedule(*prev) = nextSchedule(*hapus);
 			}
+			delStudio(hapus);
 			free(hapus);
-			printf("Menghapus huruf berhasil");
 		} else {
 			printf("Data Kosong");
 		}
@@ -428,20 +468,31 @@ void addStudio(Schedule *S, String name) {
 	int i;
 	
 	studio = (Studio *) malloc(sizeof(Studio));
+	studio->Chair = (almtKursi)malloc(sizeof(Kursi));
 	
 	jmlhPenonton(*studio) = 0;
 	studioName(*studio) = name;
-	studio->Chair->A[0] = 1;
-//	for(i = 0; i < 10; i++){
-//		studio->Chair->A[i] = 0;
-//		studio->Chair->B[i] = 0;
-//		studio->Chair->C[i] = 0;
-//		studio->Chair->D[i] = 0;
-//		studio->Chair->E[i] = 0;
-//		studio->Chair->F[i] = 0;
-//		studio->Chair->G[i] = 0;
-//		
-//	}
+//	memset(&studio->Chair, sizeof(studio->Chair), 0);
+	
+	for(i = 0; i < 10; i++){
+		studio->Chair->A[i] = (almtChair)malloc(sizeof(Chair));
+		studio->Chair->B[i] = (almtChair)malloc(sizeof(Chair));
+		studio->Chair->C[i] = (almtChair)malloc(sizeof(Chair));
+		studio->Chair->D[i] = (almtChair)malloc(sizeof(Chair));
+		studio->Chair->E[i] = (almtChair)malloc(sizeof(Chair));
+		studio->Chair->F[i] = (almtChair)malloc(sizeof(Chair));
+		studio->Chair->G[i] = (almtChair)malloc(sizeof(Chair));
+	}
+	
+	for(i = 0; i < 10; i++){
+		studio->Chair->A[i]->status = 0;
+		studio->Chair->B[i]->status = 0;
+		studio->Chair->C[i]->status = 0;
+		studio->Chair->D[i]->status = 0;
+		studio->Chair->E[i]->status = 0;
+		studio->Chair->F[i]->status = 0;
+		studio->Chair->G[i]->status = 0;
+	}
 //	firstChair(*studio) = NULL;
 //	lastChair(*studio) = NULL;
 	nextStudio(*S) = studio;
@@ -469,41 +520,3 @@ void printStudio(Schedule S) {
 	
 	printf("Nama Studio : %s \nJumlah Penonton : %d", bantu->studioName, bantu->jmlhPenonton);
 }
-
-/*NRLL Chair*/
-//int isChairEmpty(Studio St) {
-//	if (firstChair(St) == NULL) return 1;
-//
-//	return 0;
-//}
-
-//void addChair(Studio *St, String numchair, String name, int age) {
-//	Chair *chair;
-//	chair = (Chair*)malloc(sizeof(Chair));
-//	if (chair != NULL) {
-//		numChair(*chair) = numchair;
-//		chair->person.name = name;
-//		chair->person.age = age;
-//		if (isChairEmpty(*St)) {
-//			firstChair(*St) = chair;
-//			lastChair(*St) = chair;
-//		}
-//		else {
-//			nextChair(*lastChair(*St)) = chair;
-//			lastChair(*St) = chair;
-//		}
-//		nextChair(*chair) = NULL;
-//	} else {
-//		printf("\nMemori penuh");
-//	}
-//}
-
-//void printChair(Studio St) {
-//	Chair* bantu;
-//	bantu = St.firstChair;
-//
-//	while (bantu != NULL) {
-//		printf("%s - %s\n", numChair(*bantu), bantu->person.name);
-//		bantu = nextChair(*bantu);
-//	}
-//}

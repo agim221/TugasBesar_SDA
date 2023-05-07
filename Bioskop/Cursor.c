@@ -1,3 +1,12 @@
+/*
+	File 				: Cursor.c
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include"MainProses.c"
 
 int Cursor(int BanyakPilihan,int x,int y)
@@ -45,7 +54,7 @@ int Cursor(int BanyakPilihan,int x,int y)
 				gotoxy(x,y); printf("%c",62);
 			}
 		}
-		gotoxy(0, 0); printf("%d", cursor);
+//		gotoxy(0, 0); printf("%d", cursor);
 	}while(cursor != 13);
 
 	return Pilih;

@@ -1,3 +1,12 @@
+/*
+	File 				: main.c
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include"Menu.c"
 
 int main() {
@@ -7,6 +16,7 @@ int main() {
 
 	createLocket(locket, "loket1", 0);
 	createLocket(locket, "loket2", 1);
+//	printf("%d", list.firstDate->firstFilm->firstSchedule->nextStudio->Chair.A[0]);
 	
 //	addPerson(locket, "Agim", 19, 0);
 //	addPerson(locket, "Saya", 20, 0);
@@ -23,8 +33,8 @@ int main() {
 	
 //	testFilm
 	addFilmFirst(list.firstDate, "Pirates of the carribean", "action", 18, 168);
-//	addFilmAfter(list.firstDate->firstFilm, list.firstDate, "Troll", "comedi", 20, 150);
-//	addFilmLast(list.firstDate, "tamiya", "lulu", 11, 21);
+	addFilmAfter(list.firstDate->firstFilm, list.firstDate, "Troll", "comedi", 20, 150);
+	addFilmLast(list.firstDate, "tamiya", "lulu", 11, 21);
 //	printFilm(*list.firstDate);
 
 //	testSchedule
@@ -33,10 +43,10 @@ int main() {
 	addScheduleLast(list.firstDate->firstFilm, 11, 30);
 //	printSchedule(*list.firstDate->firstFilm);
 
-
 	
 	/*TEST STUDIO*/
 	addStudio(list.firstDate->firstFilm->firstSchedule, "Studio 1");
+//	addStudio(list.firstDate->firstFilm->firstSchedule->nextSchedule, "Studio 2");
 //	printStudio(*list.firstDate->firstFilm->firstSchedule);
 //	printListFilm(locket, &list);
 //tampilanMenuUtama(locket, &list);
@@ -58,12 +68,12 @@ int main() {
 //	printQueue(locket, 0);
 //	CreateFilm(&list);
 //	printListFilm(locket, &list);
-	system("pause");
-	system("cls");
+//	system("pause");
+//	system("cls");
 //	tampilanMenuUtama(locket ,&list);
 //	CreateFilm(&list);
 //	EditFilm(&list);
-	system("cls");
+//	system("cls");
 //	printListFilm(locket, &list);
 //	tampilanMenuUtama(locket ,&list);
 	

@@ -1,6 +1,17 @@
+/*
+	File 				: MainProses.c
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include"Queue.c"
 
 void serveQueue(lockets queue, List *X, int index){	
+	int x = 14;
+	int y = 3;
 	if(isLocketEmpty(queue, index)){
 		system("cls");
 		gotoxy(30, 8); printf("Antrian Kosong, Silahkan Input Antrian Terlebih Dahulu.\n");
@@ -8,10 +19,20 @@ void serveQueue(lockets queue, List *X, int index){
 		system("cls");
 	}else{
 		List *bantu = X;
+		int i;
+		Film *film;
+		film = bantu->firstDate->firstFilm;
+		Schedule *schedule = film->firstSchedule;
 		printPilihFilmDanJadwal(queue, bantu);
+		for(i = 1; i < cursorPilihFilm(CountFilm(bantu->firstDate), &x, &y); i++) {
+				film = nextFilm(*film);
+		}
+		y+= 3;
+		for(i = 1; i < cursorPilihJadwal(CountSchedule(*film), &x, &y);i++) {
+			schedule = nextSchedule(*schedule);
+		}
 		system("cls");
-		printChairStudio(queue, bantu);
-		delPerson(queue, index);
+		printChairStudio(queue, bantu, film, schedule, index);
 		system("cls");
 		setcolor(15);
 	}
@@ -30,10 +51,10 @@ void CreateFilm(List *L) {
 	time_t time;
 	time_t timeSchedule;
 	
-	printf("\nIngin Menambahkan Film di Tanggal Berapa ? ");
-	printf("\nMasukan Tahun : "); scanf("%d", &year);
-	printf("\nMasukan Bulan : "); scanf("%d", &month);
-	printf("\nMasukan Tanggal : "); scanf("%d", &date);
+	gotoxy(40, 2); printf("Ingin Menambahkan Film di Tanggal Berapa ? ");
+	gotoxy(40, 3);printf("Masukan Tahun : "); scanf("%d", &year);
+	gotoxy(40, 4);printf("Masukan Bulan : "); scanf("%d", &month);
+	gotoxy(40, 5);printf("Masukan Tanggal : "); scanf("%d", &date);
 	
 	memset(&time, 0, sizeof(struct tm));
 	timeStruct.tm_year = year - 1900;
@@ -47,20 +68,20 @@ void CreateFilm(List *L) {
 	
 	Date *dateFilm = GetDate(*L, time);
 	
-	printf("\nMasukan Informasi Film");
-	printf("\nTitle : "); scanf(" %[^\n]", title);
-	printf("\nCategory : "); scanf(" %[^\n]", category);
-	printf("\nAge : "); scanf("%d", &age);
-	printf("\nDuration : "); scanf("%d", &duration);
+	gotoxy(40, 6);printf("Masukan Informasi Film");
+	gotoxy(40, 7);printf("Title : "); scanf(" %[^\n]", title);
+	gotoxy(40, 8);printf("Category : "); scanf(" %[^\n]", category);
+	gotoxy(40, 9);printf("Age : "); scanf("%d", &age);
+	gotoxy(40, 10);printf("Duration : "); scanf("%d", &duration);
 	
 	addFilmLast(dateFilm , title, category, age, duration);
 	
 	Film *film = GetFilm(*L, time, title);
 
 	while(CountSchedule(*film) < 36000 / filmDuration(*film) && lagi == 'Y') {
-		printf("\nMasukan Jam Tayang : "); scanf("%d", &hour);
-		printf("\nMasukan Menit Tayang : "); scanf("%d", &minute);
-		printf("\nMasukan Studio yang Menayangkan : "); scanf(" %[^\n]", studioName);
+		gotoxy(40, 11);printf("Masukan Jam Tayang : "); scanf("%d", &hour);
+		gotoxy(40, 12);printf("Masukan Menit Tayang : "); scanf("%d", &minute);
+		gotoxy(40, 13);printf("Masukan Studio yang Menayangkan : "); scanf(" %[^\n]", studioName);
 		
 		if(ScheduleIsAvailable(*L, time, duration, hour, minute, studioName)) {
 			printf("\nMasukan Jam dan Menit tayang yang berbeda");
@@ -83,7 +104,7 @@ void CreateFilm(List *L) {
 		Schedule *schedule = GetSchedule(*L, time, title, timeSchedule);
 		
 		addStudio(schedule, studioName);
-		printf("\nIngin Memasukan Jam Tayang Lainnya ? (Y/N)"); scanf(" %c", &lagi);
+		gotoxy(30, 17);printf("Ingin Memasukan Jam Tayang Lainnya ? (Y/N)"); scanf(" %c", &lagi);
 	}
 }
 
@@ -143,6 +164,44 @@ void EditFilm(List *L) {
 			time->tm_min = tempNumber;
 			schedule->time = mktime(time);
 			break;
+	}
+}
+
+void DeleteFilm(List *L) {
+	Date *date = firstDate(*L);
+	Film *film = NULL;
+	String title = (String) malloc(sizeof(char));
+	if(date != NULL) {
+		printf("\n\n\t\t\t\tMasukan Judul Film yang ingin dihapus : ");
+		scanf("% [^\n], title");
+		
+		while(date != NULL) {
+			if(SearchFilmNext(*date, title)) {
+				film = SearchFilmNext(*date, title);
+				break;
+			}
+			date = nextDate(*date);
+		}
+	
+		if(film == NULL) {
+			printf("\nFilm tersebut tidak ada");
+		} else {
+			delFilmAfter(film, date);
+		}
+	} else {
+		printf("\nList film kosong");
+	}
+}
+
+void DeleteAllData(List *L) {
+	if(L->firstDate != NULL) {
+		while(L->firstDate != NULL) {
+			delDateFirst(L);
+		}
+		L->firstDate = NULL;
+		L->lastDate = NULL;	
+	} else {
+		printf("\nData Kosong");
 	}
 }
 

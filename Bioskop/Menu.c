@@ -1,4 +1,42 @@
+/*
+	File 				: Menu.c
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include"Cursor.c"
+
+void tampilanTicket(Film *film, Schedule *schedule, Chair *ch, lockets queue, List *L, int index){
+	struct tm *time = localtime(&schedule->time);
+	char keyboard;
+		gotoxy(55, 5); printf("Konfirmasi Pembelian : ");
+		gotoxy(50, 8); printf("Judul Film : %s", film->judul);
+		gotoxy(50, 9); printf("Kursi : %c%d", ch->KodeKursi, ch->noKursi);
+		gotoxy(50, 10); printf("Durasi : %d", film->durasi);
+		gotoxy(50, 11); printf("Kategori : %s", film->kategori);
+		gotoxy(50, 12); printf("Kategori Umur : %d", film->umur); 
+		gotoxy(50, 13); printf("Yakin membeli tiket ? [y/n]"); keyboard = getch();
+		
+	if(keyboard != 121 || keyboard == 27){
+		system("cls");
+		ch->status = 0;
+		tampilanMenuUtama(queue, L);
+	}
+	
+	system("cls");
+		gotoxy(55, 5); printf("Polban Cinema.ID");
+		gotoxy(50, 6); printf("Terimakasih telah mempercayai kami.");
+		gotoxy(50, 8); printf("Judul Film : %s", film->judul);
+		gotoxy(50, 9); printf("Jam Tayang : %d:%d", time->tm_hour, time->tm_min);
+		gotoxy(50, 10); printf("Studio : %s", schedule->nextStudio->studioName);
+		gotoxy(50, 11); printf("Kursi : %c%d", ch->KodeKursi, ch->noKursi);
+		gotoxy(50, 11); system("pause");
+		delPerson(queue, index);
+	system("cls");
+}
 
 COORD coord={0,0};
 void gotoxy(int x,int y)
@@ -15,30 +53,88 @@ void setcolor (unsigned short color)
 }
 
 void tampilanMenuUtama(lockets queue, List *L) {
-	gotoxy(55, 5); printf("Header");
-	gotoxy(50, 8); printf("1. Memasukkan Antrian");
-	gotoxy(50, 9); printf("2. Pesan Tiket");
-	gotoxy(50, 10); printf("3. Lihat Jadwal");
-	gotoxy(50, 11); printf("4. About");
+	gotoxy(55, 5); printf("Polban Cinema");
+	gotoxy(50, 8); printf("1. Pesan Tiket");
+	gotoxy(50, 9); printf("2. Lihat Jadwal");
+	gotoxy(50, 10); printf("3. About");
+	gotoxy(50, 11); printf("4. Pindah ke UI Admin");
 	gotoxy(50, 12); printf("5. Exit"); 
+	gotoxy(40, 20); printf("(C)Copyright. All right reserved. Kelompok B1");
 	pilihTampilanMenuUtama(queue, L);
+}
+
+void tampilanMenuAdmin(lockets queue, List *L) {
+	gotoxy(55, 5); printf("Polban Cinema Admin");
+	gotoxy(50, 8); printf("1. Memasukkan Antrian");
+	gotoxy(50, 9); printf("2. Lihat Jadwal");
+	gotoxy(50, 10); printf("3. Buat Film");
+	gotoxy(50, 11); printf("4. Ubah Film");
+	gotoxy(50, 12); printf("5. Hapus Film");
+	gotoxy(50, 13); printf("6. Pindah ke UI Customer"); 
+	gotoxy(50, 14); printf("7. Exit");
+	gotoxy(40, 20); printf("(C)Copyright. All right reserved. Kelompok B1");
+	pilihTampilanMenuAdmin(queue, L);
 }
 
 void pilihTampilanMenuUtama(lockets queue, List *L) {
 	switch(Cursor(5, 48, 8)) {
 		case 1: 
 			system("cls");
-			tampilanMenuPilihLoket(queue, L);
+			tampilanMenuPilihLoket2(queue, L);
 			break;
 		case 2: 
 			system("cls");
-			tampilanMenuPilihLoket2(queue, L);
+			printListFilm(queue, L);
+			system("pause");
+			system("cls");
 			break;
 		case 3: 
-			printListFilm(queue, L);
+			system("cls");
+			CreateFilm(L);
 			break;
-		case 4: break;
-		case 5: exit(1); break;
+		case 4: 
+			system("cls");
+			tampilanMenuAdmin(queue, L);
+			break;
+		case 5:
+			exit(1); 
+			break;
+	}
+	tampilanMenuUtama(queue, L);
+}
+
+void pilihTampilanMenuAdmin(lockets queue, List *L) {
+	switch(Cursor(7, 48, 8)) {
+		case 1: 
+			system("cls");
+			tampilanMenuPilihLoket(queue, L);
+			system("cls");
+			break;
+		case 2: 
+			system("cls");
+			printListFilm(queue, L);
+			system("pause");
+			system("cls");
+			break;
+		case 3: 
+			system("cls");
+			CreateFilm(L);
+			system("cls");
+			break;
+		case 4: 
+			system("cls");
+			EditFilm(L);
+			system("cls");
+			break;
+		case 5:
+		 	system("cls");
+		 	tampilkanMenuPilihDelete(queue, L);
+		 	break;
+		case 6:
+			system("cls");
+			tampilanMenuUtama(queue, L);
+			break;
+		case 7: system("cls");exit(1); break;
 	}
 	tampilanMenuUtama(queue, L);
 }
@@ -129,8 +225,8 @@ void printListFilm(lockets queue, List *L) {
 			}
 			gotoxy(35, 3 + j) ;printf("%s", filmTitle(*film));
 			gotoxy(35, 4 + j) ; printf("%s", filmCategory(*film));
-			gotoxy(93, 3 + j); printf("%d", filmAge(*film));
-			gotoxy(93, 4 + j); printf("%d", filmDuration(*film));
+			gotoxy(85, 3 + j); printf("Umur : %d", filmAge(*film));
+			gotoxy(85, 4 + j); printf("%d Menit", filmDuration(*film));
 			
 		
 			for(k = 0; k < CountSchedule(*film) * 6;k += 8) {
@@ -155,12 +251,9 @@ void printListFilm(lockets queue, List *L) {
 	}
 }	
 
-void printChairStudio(lockets queue, List *L) {
-	Date *date = firstDate(*L);
-	Film *film = firstFilm(*date);
-	Schedule *schedule = firstSchedule(*film);
+void printChairStudio(lockets queue, List *L, Film *film, Schedule *schedule, int index) {
 	struct tm *time = localtime(&schedule->time);
-	Kursi *kursi = schedule->nextStudio->Chair;
+	Kursi *kursis = schedule->nextStudio->Chair;
 	
 	int i,j,k;
 	
@@ -179,49 +272,49 @@ void printChairStudio(lockets queue, List *L) {
 		for(j = 0; j < 21; j += 3) {
 						if(j == 0){
 							gotoxy(22 + i, 6+j); 	
-							if(kursi->G[bantu-1] == 0){ 
-								setcolor(2);
+							if(kursis->G[bantu-1]->status == 0){ 
+									setcolor(2);
 								}else{ 
 									setcolor(4);
 								} printf("G%d", bantu);
 						}else if(j == 3){
 							gotoxy(22 + i, 6+j); 
-							if(kursi->F[bantu-1] == 0){ 
+							if(kursis->F[bantu-1]->status == 0){ 
 								setcolor(2);
 								}else{ 
 									setcolor(4);
 								} printf("F%d", bantu);
 						}else if(j == 6){
 							gotoxy(22 + i, 6+j); 
-							if(kursi->E[bantu-1] == 0){ 
+							if(kursis->E[bantu-1]->status == 0){ 
 								setcolor(2);
 								}else{ 
 									setcolor(4);
 								} printf("E%d", bantu);
 						}else if(j == 9){
 							gotoxy(22 + i, 6+j); 
-							if(kursi->D[bantu-1] == 0){ 
+							if(kursis->D[bantu-1]->status == 0){ 
 								setcolor(2);
 								}else{ 
 									setcolor(4);
 								} printf("D%d", bantu);
 						}else if(j == 12){
 							gotoxy(22 + i, 6+j); 
-							if(kursi->C[bantu-1] == 0){ 
+							if(kursis->C[bantu-1]->status == 0){ 
 								setcolor(2);
 								}else{ 
 									setcolor(4);
 								} printf("C%d", bantu);
 						}else if(j == 15){
 							gotoxy(22 + i, 6+j); 
-							if(kursi->B[bantu-1] == 0){ 
+							if(kursis->B[bantu-1]->status == 0){ 
 								setcolor(2);
 								}else{ 
 									setcolor(4);
 								} printf("B%d", bantu);
 						}else if(j == 18){
 							gotoxy(22 + i, 6+j); 
-							if(kursi->A[bantu-1] == 0){ 
+							if(kursis->A[bantu-1]->status == 0){ 
 								setcolor(2);
 								}else{ 
 									setcolor(4);
@@ -231,12 +324,12 @@ void printChairStudio(lockets queue, List *L) {
 			bantu++;
 	}
 	
-	gotoxy(72, 4); printf("ษอออออออออออออบ PESAN TIKET บอออออออออออออป");
+	gotoxy(72, 4); setcolor(15); printf("ษอออออออออออออบ PESAN TIKET บอออออออออออออป");
 	for(i = 0; i < 20;i++) {
-		gotoxy(72, 5 + i); printf("บ                                         บ");
+		setcolor(15); gotoxy(72, 5 + i); printf("บ                                         บ");
 	}
 	
-	if(date != NULL){
+	if(L->firstDate != NULL){
 	gotoxy(74, 6); setcolor(15); printf("Film : %s", filmTitle(*film));
 	gotoxy(74,7); printf("Durasi : %d Menit", filmDuration(*film));
 	gotoxy(74, 8); printf("Usia : %d", filmAge(*film));
@@ -245,35 +338,68 @@ void printChairStudio(lockets queue, List *L) {
 	}
 	gotoxy(74, 15); printf("Pilih kursi");
 	gotoxy(74, 16); printf("Tekan enter untuk memilih kursi");
-	gotoxy(72, 25); printf("ศอออออออออออออออออออออออออออออออออออออออออผ");
+	gotoxy(72, 25); setcolor(15); printf("ศอออออออออออออออออออออออออออออออออออออออออผ");
 	gotoxy(74,21); setcolor(4); printf("A1 : Kursi Tidak Tersedia");
 	gotoxy(74,22); setcolor(2); printf("A1 : Kursi Tersedia");
 	gotoxy(74,23); setcolor(13); printf("Û : Pointer Memilih Kursi");
 	int pilih = CursorPilihKursi();
+	
+	int nomor;
+	char kode;
+	system("cls");
+	setcolor(15);
 
 	if(pilih < 11){
-//		kursi->G[pilih-1] = 1;	
-//		printf("%d", kursiG[pilih-1]);
-		system("pause");
+		if(kursis->G[pilih-1]->status != 1){
+			kursis->G[pilih-1]->status = 1;	
+			kode = kursis->G[pilih-1]->KodeKursi = 'G';
+			nomor = kursis->G[pilih-1]->noKursi = pilih - 1;
+			tampilanTicket(film, schedule, kursis->G[pilih-1], queue, L, index);
+		}else{
+			system("cls");
+			setcolor(15);
+			puts("Kursi sudah dipilih silahkan pilih yang lain");
+			system("pause");
+			system("cls");
+			printChairStudio(queue, L, film, schedule, index);
+		}
 	}else if(pilih < 21){
-		kursi->F[pilih-11] = 1;
+		kursis->F[pilih-11]->status = 1;
+		kode =kursis->F[pilih-1]->KodeKursi = 'F';
+		nomor =kursis->F[pilih-1]->noKursi = pilih - 1;
+		tampilanTicket(film, schedule, kursis->F[pilih-1], queue, L, index);
 	}else if(pilih < 31){
-		kursi->E[pilih-21] = 1;
+		kursis->E[pilih-21]->status = 1;
+		kode =kursis->E[pilih-1]->KodeKursi = 'E';
+		nomor =kursis->E[pilih-1]->noKursi = pilih - 1;
+		tampilanTicket(film, schedule, kursis->E[pilih-1], queue, L, index);
 	}else if(pilih < 41){
-		kursi->D[pilih-31] = 1;
+		kursis->D[pilih-31]->status = 1;
+		kode =kursis->D[pilih-1]->KodeKursi = 'D';
+		nomor =kursis->D[pilih-1]->noKursi = pilih - 1;
+		tampilanTicket(film, schedule, kursis->D[pilih-1], queue, L, index);
 	}else if(pilih < 51){
-		kursi->C[pilih-41] = 1;
+		kursis->C[pilih-41]->status = 1;
+		kode =kursis->C[pilih-1]->KodeKursi = 'C';
+		nomor =kursis->C[pilih-1]->noKursi = pilih - 1;
+		tampilanTicket(film, schedule, kursis->C[pilih-1], queue, L, index);
 	}else if(pilih < 61){
-		kursi->B[pilih-51] = 1;
+		kursis->B[pilih-51]->status = 1;
+		kode =kursis->B[pilih-1]->KodeKursi = 'B';
+		nomor =kursis->B[pilih-1]->noKursi = pilih - 1;
+		tampilanTicket(film, schedule, kursis->B[pilih-1], queue, L, index);
 	}else if(pilih < 71){
-		kursi->A[pilih-61] = 1;
+		kursis->A[pilih-61]->status = 1;
+		kode =kursis->A[pilih-1]->KodeKursi = 'A';
+		nomor =kursis->A[pilih-1]->noKursi = pilih - 1;
+		tampilanTicket(film, schedule, kursis->A[pilih-1], queue, L, index);
 	}
+	
 }
 
 void printPilihFilmDanJadwal(lockets queue, List *L) {
 		Date *date = firstDate(*L);
 		int i, j, k;
-		int x = 14, y = 3;
 	//	print box
 	gotoxy(10, 1); printf("ษอออออออออออออออออออออออบ JADWAL FILM HARI INI บออออออออออออออออออออออป");
 	for(i = 2; i < 26; i++) {
@@ -307,24 +433,6 @@ void printPilihFilmDanJadwal(lockets queue, List *L) {
 		film = nextFilm(*film);
 	}
 	}
-	
-//		gotoxy(72, 3); printf("ษอออออออออออออบ PESAN TIKET บอออออออออออออป");
-//	for(i = 0; i < 20;i++) {
-//		gotoxy(72, 4 + i); printf("บ                                         บ");
-//	}
-	
-//	gotoxy(74, 5); setcolor(15); printf("Film : Pirattes of the carribean");
-//	gotoxy(74,6); printf("Durasi : 168");
-//	gotoxy(74, 7); printf("Usia : 18");
-//	gotoxy(74,8); printf("Jam Tayang : 17.24");
-//	gotoxy(74, 9); printf("Studio : 4");
-//	gotoxy(74, 14); printf("Pilih kursi");
-//	gotoxy(74, 15); printf("Tekan enter untuk memilih kursi");
-//	gotoxy(72, 24); printf("ศอออออออออออออออออออออออออออออออออออออออออผ");
-	
-	cursorPilihFilm(CountFilm(L->firstDate), &x, &y);
-	y += 3;
-	cursorPilihJadwal(CountSchedule(*L->firstDate->firstFilm), &x, &y);
 }
 
 void tampilkanPilihanMenuEditJamTayang(Film F) {
@@ -353,45 +461,36 @@ void tampilkanPilihanMenuEditFilm(Film F) {
 	gotoxy(50, 11); printf("4. Durasi");
 	if(firstSchedule(F) != NULL) gotoxy(50, 12); printf("5. Jam tayang"); 
 }
-//
-//void pilihTampilanMenuEditFilm(Film *F, int jumlahPilihan) {
-//	String tempString = (String) malloc(sizeof(char *));
-//	int tempNumber;
-//	int i;
-//	Schedule *schedule;
-//	
-//	switch(Cursor(jumlahPilihan, 48, 8)) {
-//		case 1:
-//			printf("Masukan Judul Baru : "); scanf(" %[^\n]", tempString);
-//			filmTitle(*F) = tempString;
-//			break;
-//		case 2:
-//			printf("Masukan kategori baru : "); scanf(" %[^\n]", tempString);
-//			filmCategory(*F) = tempString;
-//			break;
-//		case 3: 
-//			printf("Masukan umur baru : "); scanf("%d", &tempNumber);
-//			filmAge(*F) = tempNumber;
-//			break;
-//		case 4:
-//			printf("Masukan durasi baru : "); scanf("%d", &tempNumber);
-//			filmDuration(*F) = tempNumber;
-//			break;
-//		case 5:
-//			schedule = firstSchedule(*F);
-//			tampilkanPilihanMenuEditJamTayang(*F);
-//
-//			for(i = 0; i < Cursor(CountSchedule(*F), 48, 8) - 1; i++) {
-//				schedule = nextSchedule(*F);
-//			}
-//			time = localtime(&schedule->time);
-//			printf("Masukan Jam Tayang : "); scanf("%d", &tempNumber);
-//			time->tm_hour = tempNumber;
-//			printf("Masuka Meni Tayang : "); scanf("%d", &tempNumber);
-//			time->tm_min = tempNumber;
-//			schedule->time = mktime(time);
-//			break;
-//	}
-//}
-//
+
+void tampilkanMenuPilihDelete(lockets queue, List *L) {
+	gotoxy(55, 5); printf("Pilih opsi hapus ? ");
+	gotoxy(50, 8); printf("1. Pilih Judul");
+	gotoxy(50, 9); printf("2. Hapus Semua");
+	gotoxy(50, 10); printf("3. Kembali");
+	pilihTampilanMenuDelete(queue, L);
+}
+
+void pilihTampilanMenuDelete(lockets queue, List *L) {
+	char pilih;
+	switch(Cursor(3, 48, 8)) {
+		case 1:
+			system("cls");
+			printAllFilm(*L);
+			DeleteFilm(L);
+			break;
+		case 2:
+			system("cls");
+			printf("\nYakin ingin menghapus semua data ? (Y/N) ");
+			scanf("%c", &pilih);
+			if(pilih == 'Y') DeleteAllData(L);
+			else tampilkanMenuPilihDelete(queue, L);
+			system("cls");
+			break;
+		case 3:
+			system("cls");
+			tampilkanMenuPilihDelete(queue, L);
+			break;
+	}
+	tampilanMenuAdmin(queue, L);
+}
 

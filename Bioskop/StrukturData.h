@@ -1,3 +1,12 @@
+/*
+	File 				: StrukturData.h
+	Nama Program 		: Polban Cinema (Bioskop)
+	Tanggal Dibuat		: 9 Mei 2023
+	Author				: Muhamad Agim, Septyana Agustina, Thoriq Muhammad Fadhli
+	Versi				: 1.0
+	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
+*/
+
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
@@ -73,7 +82,7 @@ typedef struct schedule {
 } Schedule;
 
 typedef struct kursi {
-	int A[10], B[10], C[10], D[10], E[10], F[10], G[10];
+	almtChair A[10], B[10], C[10], D[10], E[10], F[10], G[10];
 } Kursi;
 
 typedef struct studio {
@@ -89,6 +98,7 @@ typedef struct person {
 } Person;
 
 typedef struct chair {
+	int status;
 	int noKursi;
 	char KodeKursi;
 	Person person;
@@ -114,6 +124,10 @@ void createDate(List *L);
 void addDateFirst(List *L, int year, int month, int date);
 void addDateAfter(Date *prev, List *L, int year, int month, int date);
 void addDateLast(List *L, int year, int month, int date);
+void delDateFirst(List *L);
+void delDateFirst(List *L);
+void delDateAfter(Date *prev, List *L) ;
+void delDateLast(List *L);
 void printDate(List L);
 
 /*NRLL Film*/
@@ -121,6 +135,9 @@ int isFilmEmpty(Date D);
 void addFilmFirst(Date *D, String title, String category, int age, int duration);
 void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration);
 void addFilmLast(Date *D, String title, String category, int age, int duration);
+void delFilmFirst(Date *D);
+void delFilmAfter(Film *prev, Date *D);
+void delFilmLast(Date *D);
 void printFilm(Date D);
 
 /*NRLL Schedule*/
@@ -128,12 +145,15 @@ int isScheduleEmpty(Film F);
 void addScheduleFirst(Film *F, int hour, int minute);
 void addScheduleAfter(Schedule *prev, Film *F, int hour, int minute);
 void addScheduleLast(Film *F, int hour, int minute);
+void delScheduleFirst(Film *F);
+void delScheduleAfter(Schedule *prev, Film *F);
+void delScheduleLast(Film *F);
 void printSchedule(Film F);
 
 /*NRLL Stduio*/
 int isStudi0Empty(Schedule S);
 void addStudio(Schedule *S, String name);
-void addStudio(Schedule *S, String name);
+void delStudio(Schedule *S);
 void printStudio(Schedule S);
 
 /*NRLL Chair*/
@@ -151,15 +171,20 @@ void delPerson(lockets L, int index);
 
 /*Menu*/
 void tampilanMenuUtama(lockets queue, List *L);
+void tampilanMenuAdmin(lockets queue, List *L);
 void pilihTampilanMenuUtama(lockets queue, List *L);
+void pilihTampilanMenuAdmin(lockets queue, List *L);
 void tampilanMenuPilihLoket2(lockets queue, List *);
 void tampilanMenuPilihLoket(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket2(lockets queue, List *L);
 void pilihTampilanMenuPilihLoket(lockets queue, List *L);
 void printListFilm(lockets queue, List *L);
-void printChairStudio(lockets queue, List *L);
+void printChairStudio(lockets queue, List *L, Film *film, Schedule *schedule, int index);
 void tampilkanPilihanMenuEditFilm(Film F);
 void tampilkanPilihanMenuEditJamTayang(Film F);
+void tampilanTicket(Film *film, Schedule *schedule, Chair *ch, lockets queue, List *L, int index);
+void tampilkanMenuPilihDelete(lockets queue, List *L);
+void pilihTampilanMenuDelete(lockets queue, List *L);
 
 /*Cursor*/
 int Cursor(int BanyakPilihan, int x, int y);

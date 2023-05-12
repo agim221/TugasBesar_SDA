@@ -202,14 +202,26 @@ void pilihTampilanMenuPilihLoket(lockets queue, List *L) {
 			gotoxy(55, 5); printf("Loket 1");
 			system("cls");
 			gotoxy(55, 5); printf("Masukan umur : "); scanf("%d", &age);
-			addPerson(queue , age, pilih - 1);
+			if(CountPerson(queue, 1) < CountPerson(queue, 0) && CountPerson(queue, 0) != 0){
+				gotoxy(30, 7); printf("Antrian loket 2 lebih sedikit.. Ditambahkan ke antrian loket 2..\n");
+				system("pause");
+				addPerson(queue , age, pilih);
+			} else {
+				addPerson(queue , age, pilih - 1);
+			}
 			break;
 		case 2: 
 			system("cls");
 			gotoxy(55, 5); printf("Loket 2");
 			system("cls");
 			gotoxy(55, 5); printf("Masukan umur : "); scanf("%d", &age);
-			addPerson(queue , age, pilih - 1);
+			if(CountPerson(queue, 0) < CountPerson(queue, 1) && CountPerson(queue, 1) != 0){
+				gotoxy(30, 7); printf("Antrian loket 1 lebih sedikit.. Ditambahkan ke antrian loket 1..\n");
+				system("pause");
+				addPerson(queue , age, pilih - 2);
+			} else {
+				addPerson(queue , age, pilih - 1);
+			}
 			break;
 		case 3:
 			system("cls");

@@ -148,6 +148,19 @@ almtSchedule SearchSchedulePrev(Film f, int hour, int minute) {
 	return NULL;
 }
 
+int CountPerson(lockets queue, int index) {
+	Person *bantu;
+	bantu = firstPerson(queue, index);
+	int hasil = 0;
+	
+	while(bantu != NULL) {
+		hasil++;
+		bantu = nextPerson(*bantu);
+	}
+	
+	return hasil;
+}
+
 //int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio) {
 //	Date *date = firstDate(L);
 //	Film *film;

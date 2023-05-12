@@ -161,7 +161,6 @@ void printDate(List L) {
 int isFilmEmpty(Date D) {
 	
 	if(nextFilm(D) == NULL) return 1;
-	printf("setan");
 	return 0;
 }
 

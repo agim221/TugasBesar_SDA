@@ -12,6 +12,13 @@
 void serveQueue(lockets queue, List *X, int index){	
 	int x = 14;
 	int y = 3;
+	int ada = 1;
+	int pilih;
+	int tiket;
+	int i;
+	struct tm *tempTime = (struct tm *) malloc(sizeof(struct tm));
+
+	printf("%s", ctime(&timeLocalTime_t));;
 	if(isLocketEmpty(queue, index)){
 		system("cls");
 		gotoxy(30, 8); printf("Antrian Kosong, Silahkan Input Antrian Terlebih Dahulu.\n");
@@ -24,22 +31,134 @@ void serveQueue(lockets queue, List *X, int index){
 		film = bantu->firstDate->firstFilm;
 		Schedule *schedule = film->firstSchedule;
 		printPilihFilmDanJadwal(queue, bantu);
-		for(i = 1; i < cursorPilihFilm(CountFilm(bantu->firstDate), &x, &y); i++) {
-				film = nextFilm(*film);
+		pilih = cursorPilihFilm(CountFilm(bantu->firstDate), &x, &y);
+		if(pilih == 99) {
+			ada = 0;
+			goto end;
 		}
+		for(i = 1; i < pilih; i++) {
+			film = nextFilm(*film);
+		}
+		
+		if(firstPerson(queue, index)->age < film->umur) {
+			system("cls");
+			ada = 0;
+			printf("Belum cukup umur. Pilih film lainnya");
+			system("pause");
+			system("cls");
+			goto end;
+		}
+		
 		y+= 3;
-		for(i = 1; i < cursorPilihJadwal(CountSchedule(*film), &x, &y);i++) {
+		
+		pilih = cursorPilihJadwal(CountSchedule(*film), &x, &y);
+		for(i = 1; i < pilih;i++) {
 			schedule = nextSchedule(*schedule);
 		}
-		system("cls");
-		printChairStudio(queue, bantu, film, schedule, index);
-		system("cls");
-		setcolor(15);
+		
+		tempTime = localtime(&schedule->time);
+			
+		if(tempTime->tm_hour < timeLocalStruct->tm_hour || tempTime->tm_hour == timeLocalStruct->tm_hour && tempTime->tm_min >= timeLocalStruct->tm_min) {
+			system("cls");
+			printf("Jam tersebut sudah tidak tersedia, pilih yang lainnya\n");
+			system("pause");
+			ada = 0;
+			system("cls");	
+		}
+		
+		end:
+			if(ada) {
+				system("cls");
+				printf("Masukan jumlah tiket yang ingin dipesan");scanf("%d", &tiket);
+				for(i = 0; i < tiket;i++) {
+					printChairStudio(queue, bantu, film, schedule, index);
+					system("cls");
+				}
+				setcolor(15);
+			} else if(pilih == 99) {
+				system("cls");
+				tampilanMenuUtama(queue, X);
+			} else {
+				serveQueue(queue, X, index);
+			}
 	}
 }
 
+//void CreateFilm(List *L) {
+//	int date, hour, minute;
+//	String title, category, studioName;
+//	title = (String) malloc(sizeof(char));
+//	category = (String) malloc(sizeof(char));
+//	studioName = (String) malloc(sizeof(char));
+//	int age, duration;
+//	char lagi = 'Y';
+//	
+//	struct tm timeStruct;
+//	time_t time;
+//	time_t timeSchedule;
+//	
+//	gotoxy(40, 2); printf("Ingin Menambahkan Film di Tanggal Berapa ? ");
+//	gotoxy(40, 5);printf("Masukan Tanggal : "); scanf("%d", &date);
+//	
+//	memset(&time, 0, sizeof(struct tm));
+//	timeStruct.tm_year = timeLocalStruct->tm_year;
+//	timeStruct.tm_mon = timeLocalStruct->tm_mon;
+//	timeStruct.tm_mday = date;
+//	time = mktime(&timeStruct);
+//	
+//	if(GetDate(*L, time) == NULL) {
+//		addDateLast(L, timeStruct.tm_year, timeStruct.tm_mon, date);
+//	}
+//	
+//	Date *dateFilm = GetDate(*L, time);
+//	
+//	gotoxy(40, 6);printf("Masukan Informasi Film");
+//	gotoxy(40, 7);printf("Title : "); scanf(" %[^\n]", title);
+//	gotoxy(40, 8);printf("Category : "); scanf(" %[^\n]", category);
+//	gotoxy(40, 9);printf("Age : "); scanf("%d", &age);
+//	gotoxy(40, 10);printf("Duration : "); scanf("%d", &duration);
+//	
+//	addFilmLast(dateFilm , title, category, age, duration);
+//	
+//	Film *film = GetFilm(*L, time, title);
+//
+//	while(CountSchedule(*film) < 36000 / filmDuration(*film) && lagi == 'Y') {
+//		jam :
+//			gotoxy(40, 11);printf("Masukan Jam Tayang : "); scanf("%d", &hour);
+//		if(timeLocalStruct->tm_hour < 10 || timeLocalStruct->tm_hour > 20) {
+//			printf("\nMasukan di jam operasional antara jam 10 - 20");
+//			goto jam;
+//		}
+//		gotoxy(40, 12);printf("Masukan Menit Tayang : "); scanf("%d", &minute);
+//		gotoxy(40, 13);printf("Masukan Studio yang Menayangkan : "); scanf(" %[^\n]", studioName);
+//		
+//		if(ScheduleIsAvailable(*L, time, duration, hour, minute, studioName)) {
+//			printf("\nMasukan Jam dan Menit tayang yang berbeda");
+//			continue;
+//		}
+//		
+//		if(firstSchedule(*film) == NULL) {
+//			addScheduleFirst(film, hour, minute);
+//		} else {
+//			addScheduleAfter(SearchSchedulePrev(*film, hour, minute), film, hour, minute);
+//		}
+//		
+//		timeStruct.tm_year = 2020-1900;
+//		timeStruct.tm_mon = 0;
+//		timeStruct.tm_mday = 1;
+//		timeStruct.tm_hour = hour;
+//		timeStruct.tm_min = minute;
+//		timeSchedule = mktime(&timeStruct);
+//		
+//		Schedule *schedule = GetSchedule(*L, time, title, timeSchedule);
+//		
+//		addStudio(schedule, studioName);
+//		gotoxy(30, 17);printf("Ingin Memasukan Jam Tayang Lainnya ? (Y/N)"); scanf(" %c", &lagi);
+//	}
+//}
+
 void CreateFilm(List *L) {
-	int year, month, date, hour, minute;
+	int date, hour, minute;
 	String title, category, studioName;
 	title = (String) malloc(sizeof(char));
 	category = (String) malloc(sizeof(char));
@@ -48,49 +167,64 @@ void CreateFilm(List *L) {
 	char lagi = 'Y';
 	
 	struct tm timeStruct;
-	time_t time;
+	time_t timeDate;
 	time_t timeSchedule;
 	
 	gotoxy(40, 2); printf("Ingin Menambahkan Film di Tanggal Berapa ? ");
-	gotoxy(40, 3);printf("Masukan Tahun : "); scanf("%d", &year);
-	gotoxy(40, 4);printf("Masukan Bulan : "); scanf("%d", &month);
 	gotoxy(40, 5);printf("Masukan Tanggal : "); scanf("%d", &date);
 	
-	memset(&time, 0, sizeof(struct tm));
-	timeStruct.tm_year = year - 1900;
-	timeStruct.tm_mon = month - 1;
+	memset(&timeStruct, 0, sizeof(struct tm));
+	timeStruct.tm_year = timeLocalStruct->tm_year;
+	timeStruct.tm_mon = timeLocalStruct->tm_mon;
 	timeStruct.tm_mday = date;
-	time = mktime(&timeStruct);
+	timeDate = mktime(&timeStruct);
 	
-	if(GetDate(*L, time) == NULL) {
-		addDateLast(L, year, month, date);
+	if(GetDate(*L, timeDate) == NULL) {
+		addDateLast(L, timeStruct.tm_year, timeStruct.tm_mon, date);
 	}
-	
-	Date *dateFilm = GetDate(*L, time);
+
+	Date *dateFilm = GetDate(*L, timeDate);
 	
 	gotoxy(40, 6);printf("Masukan Informasi Film");
 	gotoxy(40, 7);printf("Title : "); scanf(" %[^\n]", title);
 	gotoxy(40, 8);printf("Category : "); scanf(" %[^\n]", category);
 	gotoxy(40, 9);printf("Age : "); scanf("%d", &age);
 	gotoxy(40, 10);printf("Duration : "); scanf("%d", &duration);
+		
+//	addFilmFirst(dateFilm, title, category, age, duration);
+	addFilmLast(dateFilm, title, category, age, duration);
 	
-	addFilmLast(dateFilm , title, category, age, duration);
+	Film *film = GetFilm(*L, timeDate, title);
+	printf("%s", film->judul);
+	system("pause");
 	
-	Film *film = GetFilm(*L, time, title);
-
-	while(CountSchedule(*film) < 36000 / filmDuration(*film) && lagi == 'Y') {
-		gotoxy(40, 11);printf("Masukan Jam Tayang : "); scanf("%d", &hour);
+	while(lagi == 'Y') {
+		jam :
+			gotoxy(40, 11);printf("Masukan Jam Tayang : "); scanf("%d", &hour);
+		if(hour < 10 || hour > 20) {
+			printf("\nMasukan di jam operasional antara jam 10 - 20");
+			goto jam;
+		}
 		gotoxy(40, 12);printf("Masukan Menit Tayang : "); scanf("%d", &minute);
 		gotoxy(40, 13);printf("Masukan Studio yang Menayangkan : "); scanf(" %[^\n]", studioName);
 		
-		if(ScheduleIsAvailable(*L, time, duration, hour, minute, studioName)) {
+		
+		
+		if(ScheduleIsAvailable(*L, *dateFilm, studioName, duration, hour, minute)) {
 			printf("\nMasukan Jam dan Menit tayang yang berbeda");
 			continue;
 		}
 		
+		printf("test");
+		system("pause");
+		
 		if(firstSchedule(*film) == NULL) {
+			printf("\nMasuk di awal");
+			system("pause");
 			addScheduleFirst(film, hour, minute);
 		} else {
+			printf("\nMasuk setelahnya");
+			system("pause");
 			addScheduleAfter(SearchSchedulePrev(*film, hour, minute), film, hour, minute);
 		}
 		
@@ -101,11 +235,49 @@ void CreateFilm(List *L) {
 		timeStruct.tm_min = minute;
 		timeSchedule = mktime(&timeStruct);
 		
-		Schedule *schedule = GetSchedule(*L, time, title, timeSchedule);
+		Schedule *schedule = GetSchedule(*L, timeDate, title, timeSchedule);
 		
 		addStudio(schedule, studioName);
 		gotoxy(30, 17);printf("Ingin Memasukan Jam Tayang Lainnya ? (Y/N)"); scanf(" %c", &lagi);
 	}
+}
+
+int ScheduleIsAvailable(List L, Date date, String studioName, int duration, int hour, int minute) {
+	Film *film = firstFilm(date);
+	Schedule *schedule;
+	int studioExist;
+	
+//	struct tm *timeStruct;
+//	time_t time;
+//	timeStruct = (struct tm *) malloc(sizeof(struct tm));
+//	memset(timeStruct, 0, sizeof(struct tm));
+//	timeStruct->tm_year = 2020-;
+//	timeStruct->tm_mon = 0;
+//	timeStruct->tm_mday = 1;
+//	timeStruct->tm_hour = hour;
+//	timeStruct->tm_min = minute;
+//	time = mktime(timeStruct);
+	
+	studioExist = isStudioExist(film, studioName);
+	printf("\n%d\n", studioExist);
+	system("pause");
+	
+	while(film != NULL) {
+		if(studioExist) {
+			schedule = firstSchedule(*film);
+			while(schedule != NULL) {
+				printf("%s", ctime(&schedule->time));
+				printf("%s", ctime(&timeLocalTime_t));
+				if((difftime(timeLocalTime_t, schedule->time) > duration * 60) && (!strcmp(studioName, schedule->nextStudio->studioName))) return 1;
+				schedule = nextSchedule(*schedule);
+			}
+		} else {
+			return 0;
+		}
+		film = nextFilm(*film);		
+	}
+	
+	return 0;
 }
 
 void EditFilm(List *L) {

@@ -9,6 +9,21 @@
 
 #include"NRLL.c"
 
+//almtDate SearchDate(List L, time_t time) {
+//	Date *date;
+//	date = firstDate(L);
+//	struct tm *timeStruct = (struct tm *) malloc(sizeof(struct tm));
+//	timeStruct = localtime(&date->time);
+//	
+//	while(date != NULL) {
+//		if(timeLocalStruct->tm_mday == timeStruct->tm_mday) return date;
+//		date = date->nextDate;
+//		printf("%d %d", timeLocalStruct->tm_mday, timeStruct->tm_mday);
+//	}
+//	
+//	return NULL;
+//}
+
 almtDate SearchDate(List L, time_t time) {
 	Date *date;
 	date = firstDate(L);
@@ -133,52 +148,54 @@ almtSchedule SearchSchedulePrev(Film f, int hour, int minute) {
 	return NULL;
 }
 
-int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio) {
-	Date *date = firstDate(L);
-	Film *film;
-	Schedule *schedule;
-	int studioExist = 0;
-	struct tm timeStruct;
-	memset(&timeStruct, 0, sizeof(struct tm));
-	timeStruct.tm_year = 2020-1900;
-	timeStruct.tm_mon = 0;
-	timeStruct.tm_mday = 1;
-	timeStruct.tm_hour = hour;
-	timeStruct.tm_min = minute;
-	time_t time2 = mktime(&timeStruct);
-	
-	while(date != NULL) {
-		if(difftime(date->time, time) == 0) {
-			film = firstFilm(*date);
-			break;
-		}
-		date = nextDate(*date);
-	}
-	
-	if(date == NULL) return 0;
-	
-	studioExist = isStudioExist(*date, studio);
-	
-	while(film != NULL) {
-		schedule = firstSchedule(*film);
-		
-		if(studioExist) {
-			while(schedule != NULL) {
-				if((difftime(time2, schedule->time) < duration * 60) && (!strcmp(studio, schedule->nextStudio->studioName))) return 1;
-				schedule = nextSchedule(*schedule);
-			}
-		} else {
-			while(schedule != NULL) {
-				if(difftime(time2, schedule->time) < duration * 60) return 1;
-				schedule = nextSchedule(*schedule);
-			}
-		}
-			
-		film = nextFilm(*film);
-	}
-	
-	return 0;
-}
+//int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio) {
+//	Date *date = firstDate(L);
+//	Film *film;
+//	Schedule *schedule;
+//	int studioExist = 0;
+//	struct tm timeStruct;
+//	memset(&timeStruct, 0, sizeof(struct tm));
+//	timeStruct.tm_year = 2020-1900;
+//	timeStruct.tm_mon = 0;
+//	timeStruct.tm_mday = 1;
+//	timeStruct.tm_hour = hour;
+//	timeStruct.tm_min = minute;
+//	time_t time2 = mktime(&timeStruct);
+//	
+//	while(date != NULL) {
+//		if(difftime(date->time, time) == 0) {
+//			film = firstFilm(*date);
+//			break;
+//		}
+//		date = nextDate(*date);
+//	}
+//	
+//	studioExist = isStudioExist(film, studio);
+//	
+//	while(film != NULL) {
+//		schedule = firstSchedule(*film);
+//		
+//		if(studioExist) {
+//			while(schedule != NULL) {
+//				if((difftime(time2, schedule->time) > duration * 60) && (!strcmp(studio, schedule->nextStudio->studioName))) return 1;
+//				schedule = nextSchedule(*schedule);
+//			}
+//		} else {
+////			while(schedule != NULL) {
+////				printf("%s", ctime(&time2));
+////				printf("%s", ctime(&schedule->time));
+////				system("pause");
+////				if(difftime(time2, schedule->time) > duration * 60) return 1;
+////				schedule = nextSchedule(*schedule);
+////			}
+//			return 0;
+//		}
+//			
+//		film = nextFilm(*film);
+//	}
+//	
+//	return 0;
+//}
 
 int CountFilm(Date *D) {
 	Film *bantu;
@@ -193,21 +210,20 @@ int CountFilm(Date *D) {
 	return hasil;
 }
 
-int isStudioExist(Date D, String studioName) {
-	Film *film;
+int isStudioExist(Film *film, String studioName) {
+	Film *bantu = film;
 	Schedule *schedule;
-	film = firstFilm(D);
 	
-	while(film != NULL) {
-		schedule = firstSchedule(*film);
+	while(bantu != NULL) {
+		schedule = firstSchedule(*bantu);
 		while(schedule != NULL) {
 			if(!strcmp(studioName, schedule->nextStudio->studioName)) {
 				return 1;
 			}
 			schedule = schedule->nextSchedule;
 		}
-		film = nextFilm(*film);
+		bantu = nextFilm(*bantu);
 	}
-	
+		
 	return 0;
 }

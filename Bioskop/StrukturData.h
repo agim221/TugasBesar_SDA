@@ -116,7 +116,8 @@ typedef struct {
 	almtDate lastDate;
 } List;
 
-
+struct tm *timeLocalStruct;
+time_t timeLocalTime_t;
 
 /*NRLL Date*/
 int isDateEmpty(List L);
@@ -166,7 +167,7 @@ void setcolor (unsigned short color);
 /*Queue*/
 int isLocketEmpty(lockets L, int index);
 int totalNode(lockets L, int index);
-void addPerson(lockets L, String name, int age, int index);
+void addPerson(lockets L, int age, int index);
 void delPerson(lockets L, int index);
 
 /*Menu*/
@@ -185,6 +186,12 @@ void tampilkanPilihanMenuEditJamTayang(Film F);
 void tampilanTicket(Film *film, Schedule *schedule, Chair *ch, lockets queue, List *L, int index);
 void tampilkanMenuPilihDelete(lockets queue, List *L);
 void pilihTampilanMenuDelete(lockets queue, List *L);
+
+void tampilkanPilihTimeLocal(lockets queue, List *L);
+void pilihTampilanTimeLocal(lockets queue, List *L);
+
+/*Local Time*/
+void increaseTime(int minute);
 
 /*Cursor*/
 int Cursor(int BanyakPilihan, int x, int y);
@@ -222,6 +229,8 @@ almtStudio GetStudio(List L, time_t timeDate, String name, time_t timeFilm,Strin
 /* Jika ada, mengirimkan address node tsb. */
 /* Jika tidak ada, mengirimkan NULL */
 
+/*MANIPULATION FILE*/
+void saveAllDate(Date date, FILE *fp);
 
 //
 int CountSchedule(Film f);
@@ -231,10 +240,12 @@ mengembalikan jumlah total schedule yang tersedia tersebut*/
 int CountFilm(Date *D);
 /*Menghitung semua film yang tersedia di sebuah tanggal yang ditentukan*/
 
-int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio);
+int ScheduleIsAvailable(List L, Date date, String studioName, int duration, int hour, int minute);
+//int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio);
 /*Mengecek apakah dijam tersebut masih ada film yang ditayangkan atau tidak*/
 
-int isStudioExist(Date D, String studioName);
+//int isStudioExist(List L, String studioName);
+int isStudioExist(Film *film, String studioName);
 /*Mengecek apakah sebuah studio dengan nama yang ditentukan sudah ada atau tidak*/
 
 /*Main Proses*/

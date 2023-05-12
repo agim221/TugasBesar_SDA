@@ -42,11 +42,10 @@ int totalNodePerson(lockets L, int index) {
 	return hasil;
 }
 
-void addPerson(lockets L, String name, int age, int index) {
+void addPerson(lockets L, int age, int index) {
 	Person *baru;
 	baru = (Person *) malloc(sizeof(Person));
 	age(*baru) = age;
-	namePerson(*baru) = name;
 	
 	if(baru != NULL) {
 		if(isLocketEmpty(L, index)) {

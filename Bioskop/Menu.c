@@ -9,6 +9,21 @@
 
 #include"Cursor.c"
 
+COORD coord={0,0};
+void gotoxy(int x,int y)
+{
+    coord.X=x;
+    coord.Y=y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
+}
+
+void setcolor (unsigned short color)
+{
+    HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hCon,color);
+}
+
+
 void tampilanTicket(Film *film, Schedule *schedule, Chair *ch, lockets queue, List *L, int index){
 	struct tm *time = localtime(&schedule->time);
 	char keyboard;
@@ -38,20 +53,6 @@ void tampilanTicket(Film *film, Schedule *schedule, Chair *ch, lockets queue, Li
 	system("cls");
 }
 
-COORD coord={0,0};
-void gotoxy(int x,int y)
-{
-    coord.X=x;
-    coord.Y=y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
-}
-
-void setcolor (unsigned short color)
-{
-    HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hCon,color);
-}
-
 void tampilanMenuUtama(lockets queue, List *L) {
 	gotoxy(55, 5); printf("Polban Cinema");
 	gotoxy(50, 8); printf("1. Pesan Tiket");
@@ -70,8 +71,9 @@ void tampilanMenuAdmin(lockets queue, List *L) {
 	gotoxy(50, 10); printf("3. Buat Film");
 	gotoxy(50, 11); printf("4. Ubah Film");
 	gotoxy(50, 12); printf("5. Hapus Film");
-	gotoxy(50, 13); printf("6. Pindah ke UI Customer"); 
-	gotoxy(50, 14); printf("7. Exit");
+	gotoxy(50, 13); printf("6. Ubah Waktu Lokal");
+	gotoxy(50, 14); printf("7. Pindah ke UI Customer"); 
+	gotoxy(50, 15); printf("8. Exit");
 	gotoxy(40, 20); printf("(C)Copyright. All right reserved. Kelompok B1");
 	pilihTampilanMenuAdmin(queue, L);
 }
@@ -80,6 +82,13 @@ void pilihTampilanMenuUtama(lockets queue, List *L) {
 	switch(Cursor(5, 48, 8)) {
 		case 1: 
 			system("cls");
+			if(timeLocalStruct->tm_hour <= 10 || timeLocalStruct->tm_hour >= 20) {
+				system("cls");
+				gotoxy(45, 7); printf("Bioskop Masih tutup!!!");
+				gotoxy(0, 17);
+				system("pause");
+				break;
+			}
 			tampilanMenuPilihLoket2(queue, L);
 			break;
 		case 2: 
@@ -97,14 +106,16 @@ void pilihTampilanMenuUtama(lockets queue, List *L) {
 			tampilanMenuAdmin(queue, L);
 			break;
 		case 5:
+			saveAllData(*L);
 			exit(1); 
 			break;
 	}
+	system("cls");
 	tampilanMenuUtama(queue, L);
 }
 
 void pilihTampilanMenuAdmin(lockets queue, List *L) {
-	switch(Cursor(7, 48, 8)) {
+	switch(Cursor(8, 48, 8)) {
 		case 1: 
 			system("cls");
 			tampilanMenuPilihLoket(queue, L);
@@ -132,9 +143,13 @@ void pilihTampilanMenuAdmin(lockets queue, List *L) {
 		 	break;
 		case 6:
 			system("cls");
+			tampilkanPilihTimeLocal(queue, L);
+			break;
+		case 7:
+			system("cls");
 			tampilanMenuUtama(queue, L);
 			break;
-		case 7: system("cls");exit(1); break;
+		case 8: system("cls");exit(1); break;
 	}
 	tampilanMenuUtama(queue, L);
 }
@@ -185,12 +200,16 @@ void pilihTampilanMenuPilihLoket(lockets queue, List *L) {
 		case 1: 
 			system("cls");
 			gotoxy(55, 5); printf("Loket 1");
-			addPerson(queue , name, age, pilih - 1);
+			system("cls");
+			gotoxy(55, 5); printf("Masukan umur : "); scanf("%d", &age);
+			addPerson(queue , age, pilih - 1);
 			break;
 		case 2: 
 			system("cls");
 			gotoxy(55, 5); printf("Loket 2");
-			addPerson(queue , name, age, pilih - 1);
+			system("cls");
+			gotoxy(55, 5); printf("Masukan umur : "); scanf("%d", &age);
+			addPerson(queue , age, pilih - 1);
 			break;
 		case 3:
 			system("cls");
@@ -334,7 +353,7 @@ void printChairStudio(lockets queue, List *L, Film *film, Schedule *schedule, in
 	gotoxy(74,7); printf("Durasi : %d Menit", filmDuration(*film));
 	gotoxy(74, 8); printf("Usia : %d", filmAge(*film));
 	gotoxy(74,9); printf("Jam Tayang : %d.%d", time->tm_hour, time->tm_min);
-	gotoxy(74, 10); printf("Studio : %s", film->firstSchedule->nextStudio->studioName);
+	gotoxy(74, 10); printf("Studio : %s", schedule->nextStudio->studioName);
 	}
 	gotoxy(74, 15); printf("Pilih kursi");
 	gotoxy(74, 16); printf("Tekan enter untuk memilih kursi");
@@ -393,14 +412,14 @@ void printChairStudio(lockets queue, List *L, Film *film, Schedule *schedule, in
 		kode =kursis->A[pilih-1]->KodeKursi = 'A';
 		nomor =kursis->A[pilih-1]->noKursi = pilih - 1;
 		tampilanTicket(film, schedule, kursis->A[pilih-1], queue, L, index);
-	}
-	
+	}	
 }
 
 void printPilihFilmDanJadwal(lockets queue, List *L) {
 		Date *date = firstDate(*L);
 		int i, j, k;
 	//	print box
+	gotoxy(10, 0); 	printf("%s", ctime(&timeLocalTime_t));
 	gotoxy(10, 1); printf("ษอออออออออออออออออออออออบ JADWAL FILM HARI INI บออออออออออออออออออออออป");
 	for(i = 2; i < 26; i++) {
 	    gotoxy(10, i); printf("บ                                                                     บ");
@@ -426,8 +445,11 @@ void printPilihFilmDanJadwal(lockets queue, List *L) {
 		gotoxy(67, 4 + j); printf("%d", filmDuration(*film ));
 		for(k = 0; k < (CountSchedule(*film)) * 6; k += 8) {
 			time = localtime(&schedule->time);
+			if(time->tm_hour < timeLocalStruct->tm_hour || time->tm_hour == timeLocalStruct->tm_hour && time->tm_min <= timeLocalStruct->tm_min) setcolor(4);
+			else setcolor(2);
 			gotoxy(15 + k, 6 + j); printf("%d.%d", time->tm_hour, time->tm_min);
 			schedule = nextSchedule(*schedule);
+			setcolor(15);
 		}
 		gotoxy(11, 7 + j); printf(" ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ ");
 		film = nextFilm(*film);
@@ -494,3 +516,40 @@ void pilihTampilanMenuDelete(lockets queue, List *L) {
 	tampilanMenuAdmin(queue, L);
 }
 
+
+void tampilkanPilihTimeLocal(lockets queue, List *L) {
+	gotoxy(55, 5); printf("Ingin menambahkan waktu berapa menit ? ");
+	gotoxy(50, 8); printf("1. 10 menit");
+	gotoxy(50, 9); printf("2. 20 menit");
+	gotoxy(50, 10); printf("3. 30 menit");
+	gotoxy(50, 11); printf("4. Lainnya");
+	gotoxy(50, 12); printf("5. Kembali");
+	pilihTampilanTimeLocal(queue, L);
+}
+
+void pilihTampilanTimeLocal(lockets queue, List *L) {
+	char pilih;
+	int menit;
+	switch(Cursor(4, 48, 8)) {
+		case 1:
+			system("cls");
+			increaseTime(10);
+			break;
+		case 2:
+			system("cls");
+			increaseTime(20);
+			break;
+		case 3:
+			system("cls");
+			increaseTime(30);
+			break;
+		case 4:
+			system("cls");
+			gotoxy(45, 5); printf("Masukan Menit : ");
+			scanf("%d", &menit);
+			increaseTime(menit);
+			break;
+		case 5: break;
+	}
+	tampilanMenuAdmin(queue, L);
+}

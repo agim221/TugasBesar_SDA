@@ -161,7 +161,7 @@ int cursorPilihFilm(int opsi, int *x, int *y) {
 			{
 				gotoxy(*x,*y); printf(" ");
 				*y=21;
-				Pilih= 4;
+				Pilih= opsi;
 				gotoxy(*x,*y); printf("¯");
 			}
 			else
@@ -172,8 +172,12 @@ int cursorPilihFilm(int opsi, int *x, int *y) {
 				gotoxy(*x,*y); printf("¯");
 			}
 		}
-		gotoxy(0, 0); printf("%d", Pilih);
-	}while(cursor != 13);
+		
+		if(cursor == 27) {
+			Pilih = 99;
+		}
+		
+	}while(cursor != 13 && cursor != 27);
 
 	return Pilih;
 }
@@ -210,8 +214,8 @@ int cursorPilihJadwal(int opsi, int *x, int *y) {
 			if(Pilih-1 == 0)
 			{
 				gotoxy(*x,*y); printf(" ");
-				*x=38;
-				Pilih= 4;
+				*x=30;
+				Pilih= opsi + 1; 
 				gotoxy(*x ,*y); printf("¯");
 			}
 			else

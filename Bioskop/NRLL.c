@@ -7,7 +7,7 @@
 	Deskripsi Program	: Membuat program simulasi pelayanan bioskop.
 */
 
-#include"StrukturData.h"
+#include"LocalTime.c"
 
 
 /*NRLL Date*/
@@ -23,8 +23,8 @@ void addDateFirst(List *L, int year, int month, int date) {
 	Date *baru;
 	baru = (Date *) malloc(sizeof(Date));
 	memset(time, 0, sizeof(struct tm));
-	time->tm_year = year - 1900;
-	time->tm_mon = month - 1;
+	time->tm_year = year;
+	time->tm_mon = month;
 	time->tm_mday = date;
 	baru->time = mktime(time);
 	nextFilm(*baru) = NULL;
@@ -37,7 +37,8 @@ void addDateFirst(List *L, int year, int month, int date) {
 			lastDate(*L) = baru;
 		} else {
 			nextDate(*lastDate(*L)) = baru;
-			lastDate(*L) = baru;
+			firstDate(*L) = baru;
+//			lastDate(*L) = baru;
 		}
 		nextDate(*baru) = NULL;
 	} else {
@@ -160,7 +161,7 @@ void printDate(List L) {
 int isFilmEmpty(Date D) {
 	
 	if(nextFilm(D) == NULL) return 1;
-	
+	printf("setan");
 	return 0;
 }
 
@@ -187,6 +188,7 @@ void addFilmFirst(Date *D, String title, String category, int age, int duration)
 	} else {
 		printf("\nMemori Penuh");
 	}
+
 }
 
 void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration) {
@@ -220,11 +222,10 @@ void addFilmLast(Date *D, String title, String category, int age, int duration) 
 		last = firstFilm(*D);
 		beforeLast = NULL;
 		
-		while(last != NULL) {
-			beforeLast = last;
-			last = nextFilm(*last);
+		while(last->nextFilm != NULL) {
+			last = last->nextFilm;
 		}
-		addFilmAfter(beforeLast, D, title, category, age, duration);
+		addFilmAfter(last, D, title, category, age, duration);
 	}
 }
 
@@ -345,7 +346,7 @@ void addScheduleFirst(Film *F, int hour, int minute) {
 			lastSchedule(*F) = baru;
 		} else {
 			nextSchedule(*lastSchedule(*F)) = baru;
-//			lastSchedule(*F) = baru;
+			lastSchedule(*F) = baru;
 		}
 		nextSchedule(*baru) = NULL;
 	} else {

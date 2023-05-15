@@ -13,6 +13,8 @@ int main() {
 	
 	List list;
 	lockets locket;
+	list.firstTransaction = NULL;
+	list.lastTransaction = NULL;
 	
 	timeLocalStruct = (struct tm *) malloc(sizeof(struct tm));
 	memset(timeLocalStruct, 1, sizeof(timeLocalStruct));
@@ -43,7 +45,7 @@ int main() {
 ////	delPerson(locket, 0);
 //	
 ////	testFilm
-	addFilmFirst(list.firstDate, "Pirates of the carribean", "action", 18, 168);
+	addFilmFirst(list.firstDate, "Pirates of the carribean", "action", 18, 168, 35000);
 //	addFilmAfter(list.firstDate->firstFilm, list.firstDate, "Troll", "comedi", 20, 150);
 //	addFilmLast(list.firstDate, "tamiya", "lulu", 11, 21);
 ////	printFilm(*list.firstDate);

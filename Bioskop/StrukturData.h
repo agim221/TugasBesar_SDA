@@ -27,6 +27,7 @@
 #define filmTitle(L) (L).judul
 #define filmDuration(L) (L).durasi
 #define filmCategory(L) (L).kategori
+#define filmPrice(L) (L).harga
 #define filmAge(L) (L).umur
 #define nextFilm(L) (L).nextFilm
 
@@ -55,6 +56,7 @@ typedef struct studio *almtStudio;
 typedef struct person *almtPerson;
 typedef struct chair *almtChair;
 typedef struct kursi *almtKursi;
+typedef struct transaction *almtTransaction;
 
 typedef struct date {
 	time_t time;
@@ -69,6 +71,7 @@ typedef struct film {
 	int durasi;
 	String kategori;
 	int umur;
+	double harga;
 	almtFilm nextFilm;
 	almtSchedule firstSchedule;
 	almtSchedule lastSchedule;
@@ -114,10 +117,24 @@ typedef Loket lockets[2];
 typedef struct {
 	almtDate firstDate;
 	almtDate lastDate;
+	almtTransaction firstTransaction;
+	almtTransaction lastTransaction;
 } List;
 
 struct tm *timeLocalStruct;
 time_t timeLocalTime_t;
+
+typedef struct transaction{
+	almtChair chair;
+	almtFilm film;
+	char* waktuPembelian;
+	almtTransaction nextTransaction;
+} TransactionHistory;
+
+/*Histori Transaksi*/
+void addTransaction(List *L, Film *film, Chair *chair, Schedule *schedule);
+void printTransaction(List *L, int jam, int menit);
+int isTransactionEmpty(List *L);
 
 /*NRLL Date*/
 int isDateEmpty(List L);
@@ -133,9 +150,9 @@ void printDate(List L);
 
 /*NRLL Film*/
 int isFilmEmpty(Date D);
-void addFilmFirst(Date *D, String title, String category, int age, int duration);
-void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration);
-void addFilmLast(Date *D, String title, String category, int age, int duration);
+void addFilmFirst(Date *D, String title, String category, int age, int duration, double harga);
+void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration, double harga);
+void addFilmLast(Date *D, String title, String category, int age, int duration, double harga);
 void delFilmFirst(Date *D);
 void delFilmAfter(Film *prev, Date *D);
 void delFilmLast(Date *D);
@@ -189,6 +206,7 @@ void pilihTampilanMenuDelete(lockets queue, List *L);
 
 void tampilkanPilihTimeLocal(lockets queue, List *L);
 void pilihTampilanTimeLocal(lockets queue, List *L);
+void tampilanAbout();
 
 /*Local Time*/
 void increaseTime(int minute);

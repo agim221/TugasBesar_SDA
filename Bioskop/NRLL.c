@@ -164,13 +164,14 @@ int isFilmEmpty(Date D) {
 	return 0;
 }
 
-void addFilmFirst(Date *D, String title, String category, int age, int duration) {
+void addFilmFirst(Date *D, String title, String category, int age, int duration, double harga) {
 	Film *baru;
 	baru = (Film *) malloc(sizeof(Film));
 	filmDuration(*baru) = duration;
 	filmAge(*baru) = age;
 	filmTitle(*baru) = title;
 	filmCategory(*baru) = category;
+	filmPrice(*baru) = harga;
 	firstSchedule(*baru) = NULL;
 	lastSchedule(*baru) = NULL;
 	nextSchedule(*baru) = NULL;
@@ -190,7 +191,7 @@ void addFilmFirst(Date *D, String title, String category, int age, int duration)
 
 }
 
-void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration) {
+void addFilmAfter(Film *prev, Date *D, String title, String category, int age, int duration, double harga) {
 	if(prev != NULL) {
 		Film *baru;
 		baru = (Film *) malloc(sizeof(Film));
@@ -198,6 +199,7 @@ void addFilmAfter(Film *prev, Date *D, String title, String category, int age, i
 		filmAge(*baru) = age;
 		filmTitle(*baru) = title;
 		filmCategory(*baru) = category;
+		filmPrice(*baru) = harga;
 		firstSchedule(*baru) = NULL;
 		lastSchedule(*baru) = NULL;
 		nextSchedule(*baru) = NULL;
@@ -212,10 +214,10 @@ void addFilmAfter(Film *prev, Date *D, String title, String category, int age, i
 	}
 }
 
-void addFilmLast(Date *D, String title, String category, int age, int duration) {
+void addFilmLast(Date *D, String title, String category, int age, int duration, double harga) {
 	
 	if(firstFilm(*D) == NULL) {
-		addFilmFirst(D, title, category, age, duration);
+		addFilmFirst(D, title, category, age, duration, harga);
 	} else {
 		Film *beforeLast, *last;
 		last = firstFilm(*D);
@@ -224,7 +226,7 @@ void addFilmLast(Date *D, String title, String category, int age, int duration) 
 		while(last->nextFilm != NULL) {
 			last = last->nextFilm;
 		}
-		addFilmAfter(last, D, title, category, age, duration);
+		addFilmAfter(last, D, title, category, age, duration, harga);
 	}
 }
 

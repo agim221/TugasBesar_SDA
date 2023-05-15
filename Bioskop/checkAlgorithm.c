@@ -9,6 +9,13 @@
 
 #include"NRLL.c"
 
+int isTransactionEmpty(List *L) {
+	
+	if(L->firstTransaction == NULL) return 1;
+	
+	return 0;
+}
+
 //almtDate SearchDate(List L, time_t time) {
 //	Date *date;
 //	date = firstDate(L);

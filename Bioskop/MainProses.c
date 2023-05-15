@@ -9,6 +9,67 @@
 
 #include"Queue.c"
 
+void printTransaction(List *L, int jam, int menit) { 
+	gotoxy(0, 8); printf("No.");
+	gotoxy(10, 8); printf("Judul Film");
+	gotoxy(30, 8); printf("Studio");
+	gotoxy(40, 8); printf("Kursi");
+	gotoxy(50, 8); printf("Waktu Tayang");
+	gotoxy(70, 8); printf("Waktu Pembelian");
+	gotoxy(90, 8); printf("Harga Tiket");
+	
+	TransactionHistory *bantu = L->firstTransaction;
+	Date *bantuDate = L->firstDate;
+	struct tm *time2 = localtime(&bantuDate->time);
+	double bantuTotal = 0;
+	
+	int y = 10;   
+	int i = 1;          
+	while(bantu != NULL){
+		gotoxy(0, y); printf("%d", i);
+		gotoxy(10, y); printf("%s", bantu->film->judul);
+		gotoxy(30, y); printf("%s", bantu->film->firstSchedule->nextStudio->studioName);
+		gotoxy(40, y); printf("%c%d", bantu->chair->KodeKursi, bantu->chair->noKursi+1);
+		gotoxy(50, y); printf("%d:%d %d-%d-%d", jam, menit, time2->tm_mday, time2->tm_mon+1, time2->tm_year+1900);
+		gotoxy(70, y); printf("%s", bantu->waktuPembelian);
+		gotoxy(90, y); printf("Rp. %.f", bantu->film->harga);
+		bantuTotal = bantuTotal + bantu->film->harga;
+		
+		bantu = bantu->nextTransaction;    
+//		bantuDate = bantuDate->nextDate;                                                                                                                                                                          
+		i++;                                         
+		y++;
+	}
+		gotoxy(0, y+2); printf("Total Pendapatan : ");
+		gotoxy(90, y+2); printf("Rp. %.f", bantuTotal); 
+}
+
+void addTransaction(List *L, Film *film, Chair *chair, Schedule *schedule) { 
+	time_t rawtime;
+   	struct tm *info;
+   	time( &rawtime );
+   	info = localtime( &rawtime );
+
+	TransactionHistory *baru = (TransactionHistory *)malloc(sizeof(TransactionHistory));
+	baru->chair = chair;
+	baru->film= film;
+	baru->film->firstSchedule = schedule;
+	baru->waktuPembelian = asctime(info);
+	
+	if(baru != NULL) {
+		if(isTransactionEmpty(L)){
+			L->firstTransaction = baru;
+			L->lastTransaction = baru;
+		} else {
+			L->lastTransaction->nextTransaction = baru;
+			L->lastTransaction = baru;
+		}
+		baru->nextTransaction = NULL;
+	} else {
+		printf("\nMemori Penuh");
+	}
+}
+
 void serveQueue(lockets queue, List *X, int index){	
 	int x = 14;
 	int y = 3;
@@ -69,7 +130,7 @@ void serveQueue(lockets queue, List *X, int index){
 		end:
 			if(ada) {
 				system("cls");
-				printf("Masukan jumlah tiket yang ingin dipesan");scanf("%d", &tiket);
+				printf("Masukan jumlah tiket yang ingin dipesan : ");scanf("%d", &tiket);
 				for(i = 0; i < tiket;i++) {
 					printChairStudio(queue, bantu, film, schedule, index);
 					system("cls");
@@ -159,6 +220,7 @@ void serveQueue(lockets queue, List *X, int index){
 
 void CreateFilm(List *L) {
 	int date, hour, minute;
+	double harga;
 	String title, category, studioName;
 	title = (String) malloc(sizeof(char));
 	category = (String) malloc(sizeof(char));
@@ -170,8 +232,8 @@ void CreateFilm(List *L) {
 	time_t timeDate;
 	time_t timeSchedule;
 	
-	gotoxy(40, 2); printf("Ingin Menambahkan Film di Tanggal Berapa ? ");
-	gotoxy(40, 5);printf("Masukan Tanggal : "); scanf("%d", &date);
+	gotoxy(40, 3); printf("Ingin Menambahkan Film di Tanggal Berapa ? ");
+	gotoxy(40, 4);printf("Masukan Tanggal : "); scanf("%d", &date);
 	
 	memset(&timeStruct, 0, sizeof(struct tm));
 	timeStruct.tm_year = timeLocalStruct->tm_year;
@@ -185,18 +247,19 @@ void CreateFilm(List *L) {
 
 	Date *dateFilm = GetDate(*L, timeDate);
 	
-	gotoxy(40, 6);printf("Masukan Informasi Film");
-	gotoxy(40, 7);printf("Title : "); scanf(" %[^\n]", title);
-	gotoxy(40, 8);printf("Category : "); scanf(" %[^\n]", category);
-	gotoxy(40, 9);printf("Age : "); scanf("%d", &age);
-	gotoxy(40, 10);printf("Duration : "); scanf("%d", &duration);
+	gotoxy(40, 5);printf("Masukan Informasi Film");
+	gotoxy(40, 6);printf("Title : "); scanf(" %[^\n]", title);
+	gotoxy(40, 7);printf("Category : "); scanf(" %[^\n]", category);
+	gotoxy(40, 8);printf("Age : "); scanf("%d", &age);
+	gotoxy(40, 9);printf("Duration : "); scanf("%d", &duration);
+	gotoxy(40, 10);printf("Harga Tiket : "); scanf("%d", &harga);
 		
 //	addFilmFirst(dateFilm, title, category, age, duration);
-	addFilmLast(dateFilm, title, category, age, duration);
+	addFilmLast(dateFilm, title, category, age, duration, harga);
 	
 	Film *film = GetFilm(*L, timeDate, title);
-	printf("%s", film->judul);
-	system("pause");
+//	printf("%s", film->judul);
+//	system("pause");
 	
 	while(lagi == 'Y') {
 		jam :
@@ -214,17 +277,17 @@ void CreateFilm(List *L) {
 			printf("\nMasukan Jam dan Menit tayang yang berbeda");
 			continue;
 		}
-		
-		printf("test");
-		system("pause");
+//		
+//		printf("test");
+//		system("pause");
 		
 		if(firstSchedule(*film) == NULL) {
-			printf("\nMasuk di awal");
-			system("pause");
+//			printf("\nMasuk di awal");
+//			system("pause");
 			addScheduleFirst(film, hour, minute);
 		} else {
-			printf("\nMasuk setelahnya");
-			system("pause");
+//			printf("\nMasuk setelahnya");
+//			system("pause");
 			addScheduleAfter(SearchSchedulePrev(*film, hour, minute), film, hour, minute);
 		}
 		

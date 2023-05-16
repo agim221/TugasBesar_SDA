@@ -1,7 +1,44 @@
 Date
-$d
+121
 1
 20
-0
-0
-0
+Film
+Pirates of the carribean
+action
+168
+18
+Schedule
+12
+30
+Studio
+Studio 1
+Schedule
+15
+30
+Studio
+studio 2
+Schedule
+18
+20
+Studio
+Studio 3
+Film
+agim
+test
+112
+11
+Schedule
+14
+30
+Studio
+Studio 4
+Film
+jamesbon
+aksi
+112
+12
+Schedule
+18
+30
+Studio
+studio 2

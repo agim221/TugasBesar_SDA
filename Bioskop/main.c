@@ -36,22 +36,22 @@ int main() {
 //  testDate
 //	printChairStudio(locket, &list)
 	createDate(&list);
-	addDateFirst(&list, timeLocalStruct->tm_year, timeLocalStruct->tm_mon, 20);
+//	addDateFirst(&list, timeLocalStruct->tm_year, timeLocalStruct->tm_mon, 20);
 ////	addDateAfter(list.lastDate, &list, 2022, 3, 10);
 ////	addDateLast(&list, 2023, 4, 11);
 ////	printDate(list);
 ////	delPerson(locket, 0);
 //	
 ////	testFilm
-	addFilmFirst(list.firstDate, "Pirates of the carribean", "action", 18, 168);
+//	addFilmFirst(list.firstDate, "Pirates of the carribean", "action", 18, 168);
 //	addFilmAfter(list.firstDate->firstFilm, list.firstDate, "Troll", "comedi", 20, 150);
 //	addFilmLast(list.firstDate, "tamiya", "lulu", 11, 21);
 ////	printFilm(*list.firstDate);
 //
 ////	testSchedule
-	addScheduleFirst(list.firstDate->firstFilm, 12, 30);
-	addScheduleFirst(list.firstDate->firstFilm, 15, 30);
-	addScheduleFirst(list.firstDate->firstFilm, 18, 20);
+//	addScheduleFirst(list.firstDate->firstFilm, 12, 30);
+//	addScheduleFirst(list.firstDate->firstFilm, 15, 30);
+//	addScheduleFirst(list.firstDate->firstFilm, 18, 20);
 //	addScheduleAfter(list.firstDate->firstFilm->firstSchedule, list.firstDate->firstFilm, 10, 30);
 //	addScheduleLast(list.firstDate->firstFilm, 15, 30);
 //	printSchedule(*list.firstDate->firstFilm);
@@ -60,9 +60,9 @@ int main() {
 //
 //	
 //	/*TEST STUDIO*/
-	addStudio(list.firstDate->firstFilm->firstSchedule, "Studio 1");
-	addStudio(list.firstDate->firstFilm->firstSchedule->nextSchedule, "studio 2");
-	addStudio(list.firstDate->firstFilm->firstSchedule->nextSchedule->nextSchedule, "Studio 3");
+//	addStudio(list.firstDate->firstFilm->firstSchedule, "Studio 1");
+//	addStudio(list.firstDate->firstFilm->firstSchedule->nextSchedule, "studio 2");
+//	addStudio(list.firstDate->firstFilm->firstSchedule->nextSchedule->nextSchedule, "Studio 3");
 //	printStudio(*list.firstDate->firstFilm->firstSchedule);
 //	printListFilm(locket, &list);
 //tampilanMenuUtama(locket, &list);
@@ -77,6 +77,7 @@ int main() {
 //	printChair(*list.firstDate->firstFilm->firstSchedule->nextStudio);
 
 //	test loket
+	getAllData(&list);
 	tampilanMenuUtama(locket, &list);
 
 	

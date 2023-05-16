@@ -78,7 +78,7 @@ almtStudio SearchStudio(Schedule S, String name) {
 	Studio *studio;
 	studio = nextStudio(S);
 	
-	if(strcmp(studioName(*studio), name)) return studio;
+	if(!strcmp(studioName(*studio), name)) return studio;
 	
 	return NULL;
 }

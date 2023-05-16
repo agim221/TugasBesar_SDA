@@ -219,12 +219,8 @@ void CreateFilm(List *L) {
 		system("pause");
 		
 		if(firstSchedule(*film) == NULL) {
-			printf("\nMasuk di awal");
-			system("pause");
 			addScheduleFirst(film, hour, minute);
 		} else {
-			printf("\nMasuk setelahnya");
-			system("pause");
 			addScheduleAfter(SearchSchedulePrev(*film, hour, minute), film, hour, minute);
 		}
 		
@@ -247,17 +243,10 @@ int ScheduleIsAvailable(List L, Date date, String studioName, int duration, int 
 	Schedule *schedule;
 	int studioExist;
 	
-//	struct tm *timeStruct;
-//	time_t time;
-//	timeStruct = (struct tm *) malloc(sizeof(struct tm));
-//	memset(timeStruct, 0, sizeof(struct tm));
-//	timeStruct->tm_year = 2020-;
-//	timeStruct->tm_mon = 0;
-//	timeStruct->tm_mday = 1;
-//	timeStruct->tm_hour = hour;
-//	timeStruct->tm_min = minute;
-//	time = mktime(timeStruct);
-	
+	struct tm *timeStruct;
+
+	timeStruct = (struct tm *) malloc(sizeof(struct tm));
+
 	studioExist = isStudioExist(film, studioName);
 	printf("\n%d\n", studioExist);
 	system("pause");
@@ -266,9 +255,8 @@ int ScheduleIsAvailable(List L, Date date, String studioName, int duration, int 
 		if(studioExist) {
 			schedule = firstSchedule(*film);
 			while(schedule != NULL) {
-				printf("%s", ctime(&schedule->time));
-				printf("%s", ctime(&timeLocalTime_t));
-				if((difftime(timeLocalTime_t, schedule->time) > duration * 60) && (!strcmp(studioName, schedule->nextStudio->studioName))) return 1;
+				timeStruct = localtime(&schedule->time);
+				if((((hour - timeStruct->tm_hour) * 60) + minute - timeStruct->tm_min) < duration && (!strcmp(studioName, schedule->nextStudio->studioName))) return 1;
 				schedule = nextSchedule(*schedule);
 			}
 		} else {
@@ -345,7 +333,7 @@ void DeleteFilm(List *L) {
 	String title = (String) malloc(sizeof(char));
 	if(date != NULL) {
 		printf("\n\n\t\t\t\tMasukan Judul Film yang ingin dihapus : ");
-		scanf("% [^\n], title");
+		scanf(" %[^\n]", title);
 		
 		while(date != NULL) {
 			if(SearchFilmNext(*date, title)) {

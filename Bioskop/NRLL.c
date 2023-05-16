@@ -53,8 +53,8 @@ void addDateAfter(Date *prev, List *L,int year, int month, int date) {
 		Date *baru;
 		baru = (Date *) malloc(sizeof(Date));
 		memset(time, 0, sizeof(struct tm));
-		time->tm_year = year - 1900;
-		time->tm_mon = month - 1;
+		time->tm_year = year;
+		time->tm_mon = month;
 		time->tm_mday = date;
 		baru->time = mktime(time);
 		nextFilm(*baru) = NULL;
@@ -161,7 +161,6 @@ void printDate(List L) {
 int isFilmEmpty(Date D) {
 	
 	if(nextFilm(D) == NULL) return 1;
-	printf("setan");
 	return 0;
 }
 
@@ -222,10 +221,12 @@ void addFilmLast(Date *D, String title, String category, int age, int duration) 
 		last = firstFilm(*D);
 		beforeLast = NULL;
 		
-		while(last->nextFilm != NULL) {
+		while(last != NULL) {
+			beforeLast = last;
 			last = last->nextFilm;
 		}
-		addFilmAfter(last, D, title, category, age, duration);
+
+		addFilmAfter(beforeLast, D, title, category, age, duration);
 	}
 }
 
@@ -473,7 +474,6 @@ void addStudio(Schedule *S, String name) {
 	
 	jmlhPenonton(*studio) = 0;
 	studioName(*studio) = name;
-//	memset(&studio->Chair, sizeof(studio->Chair), 0);
 	
 	for(i = 0; i < 10; i++){
 		studio->Chair->A[i] = (almtChair)malloc(sizeof(Chair));
@@ -494,8 +494,7 @@ void addStudio(Schedule *S, String name) {
 		studio->Chair->F[i]->status = 0;
 		studio->Chair->G[i]->status = 0;
 	}
-//	firstChair(*studio) = NULL;
-//	lastChair(*studio) = NULL;
+
 	nextStudio(*S) = studio;
 }
 
@@ -519,5 +518,5 @@ void printStudio(Schedule S) {
 	Studio *bantu;
 	bantu = S.nextStudio;
 	
-	printf("Nama Studio : %s \nJumlah Penonton : %d", bantu->studioName, bantu->jmlhPenonton);
+	printf("Nama Studio : %s\nJumlah Penonton : %d\n", bantu->studioName, bantu->jmlhPenonton);
 }

@@ -79,6 +79,7 @@ void tampilanMenuAdmin(lockets queue, List *L) {
 }
 
 void pilihTampilanMenuUtama(lockets queue, List *L) {
+	Schedule *bantu = L->firstDate->firstFilm->firstSchedule;
 	switch(Cursor(5, 48, 8)) {
 		case 1: 
 			system("cls");
@@ -93,6 +94,10 @@ void pilihTampilanMenuUtama(lockets queue, List *L) {
 			break;
 		case 2: 
 			system("cls");
+			while(bantu != NULL) {
+				printStudio(*bantu);
+				bantu = bantu->nextSchedule;
+			}
 			printListFilm(queue, L);
 			system("pause");
 			system("cls");

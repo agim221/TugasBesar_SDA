@@ -231,6 +231,10 @@ almtStudio GetStudio(List L, time_t timeDate, String name, time_t timeFilm,Strin
 
 /*MANIPULATION FILE*/
 void saveAllDate(Date date, FILE *fp);
+void saveAllFilm(Film film, FILE *fp);
+void saveAllSchedule(Schedule schedule, FILE *fp) ;
+void saveStudio(Studio studio, FILE *fp);
+void saveAllChair(Kursi chair, FILE *fp);
 
 //
 int CountSchedule(Film f);

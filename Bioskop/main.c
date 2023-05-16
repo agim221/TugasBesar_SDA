@@ -13,6 +13,8 @@ int main() {
 	
 	List list;
 	lockets locket;
+	list.firstTransaction = NULL;
+	list.lastTransaction = NULL;
 	
 	timeLocalStruct = (struct tm *) malloc(sizeof(struct tm));
 	memset(timeLocalStruct, 1, sizeof(timeLocalStruct));

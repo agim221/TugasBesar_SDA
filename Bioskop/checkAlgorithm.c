@@ -9,6 +9,13 @@
 
 #include"NRLL.c"
 
+int isTransactionEmpty(List *L) {
+	
+	if(L->firstTransaction == NULL) return 1;
+	
+	return 0;
+}
+
 //almtDate SearchDate(List L, time_t time) {
 //	Date *date;
 //	date = firstDate(L);
@@ -146,6 +153,19 @@ almtSchedule SearchSchedulePrev(Film f, int hour, int minute) {
 	}
 	
 	return NULL;
+}
+
+int CountPerson(lockets queue, int index) {
+	Person *bantu;
+	bantu = firstPerson(queue, index);
+	int hasil = 0;
+	
+	while(bantu != NULL) {
+		hasil++;
+		bantu = nextPerson(*bantu);
+	}
+	
+	return hasil;
 }
 
 //int ScheduleIsAvailable(List L, time_t time, int duration, int hour, int minute, String studio) {
